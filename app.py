@@ -32,8 +32,8 @@ mongo = PyMongo(app)
 # ['keyword', 'source', 'author', 'title', 'url', 'published', 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete']
 
 @app.route('/')
-def index():
-    return 'test string'
+def home():
+    return render_template('index.html')
 
 @app.route('/api/authors')
 def getNewsMongo():
