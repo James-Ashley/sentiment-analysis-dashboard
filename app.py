@@ -35,7 +35,9 @@ mongo = PyMongo(app)
 def home():
     return render_template('index.html')
 
-@app.route('/api/authors')
+# Will need to add template rendering for all webpages as we build them
+
+@app.route('/api/testdata')
 def getNewsMongo():
     tasks = mongo.db.NFTA.find({})
     data = []
@@ -43,10 +45,20 @@ def getNewsMongo():
     for task in tasks:
         item = {
             'id': str(task['_id']),
-            'author': task['author']
+            'source': task['source'],
+            'title': task['title'],
+            'published': task['published'],
+            'compound_score': task['compound_score']
         }
         data.append(item)
     return jsonify(data)
+
+# Will need to add following routes for dataviz page 1 (filtering by domains): 
+# 1. Return list of domains in dataset
+# 2. Return title, compound_score, domain - default to return all or filter by domain
+# 3. Return word frequency lists for headlines - default all, filter by domain, and/or filter by sentiment (pos/neg/neut)
+#       Should be in format: [{word: 'word here', frequency: frequency (int)}, {word: 'word2 here', frequency: frequency2 (int)}]
+
 
 if __name__ == '__main__':
     app.run(debug=True)
