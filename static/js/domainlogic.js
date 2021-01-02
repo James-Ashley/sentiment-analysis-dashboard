@@ -2,9 +2,13 @@
 console.log('this webpage is rendering')
 
 //TODO: 
+
+//WORD CLOUD
 // Determine how many words to put in word cloud (determined by size of word cloud)
 // May also need to fiddle with sizing of words (will depend on what happens when we limit the words going in)
 // Randomize color(s) of words in word cloud (.style('fill', FUNCTION HERE))
+
+
 
 // Functions
 
