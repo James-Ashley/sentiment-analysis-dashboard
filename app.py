@@ -3,6 +3,9 @@ from flask import Flask, render_template, jsonify
 from flask_pymongo import PyMongo
 import os
 from dotenv import load_dotenv
+import nltk
+from nltk.tokenize import word_tokenize, RegexpTokenizer
+from nltk.corpus import stopwords
 
 # Pull passwords from your .env file for when you are working locally
 # TODO: Create a .env file at the same level as this file - include these two lines:
@@ -12,6 +15,25 @@ from dotenv import load_dotenv
 load_dotenv()
 username = os.getenv("db_username")
 password = os.getenv("db_password")
+
+# Initialize stop words for NLTK analysis
+stop_words = stopwords.words('english')
+
+# This function tokenizes text (removes punctuation and stop words)
+# Input = list of strings
+# Output = list of tokens
+def process_corpus(titles):
+    tokens = []
+    for title in titles:
+        
+        # Remove punctuation while tokenizing
+        tokenizer = RegexpTokenizer(r'\w+')
+        toks = tokenizer.tokenize(title)
+        
+        # Convert tokens to lowercase and then remove stop words
+        toks = [t.lower() for t in toks if t.lower() not in stop_words]
+        tokens.extend(toks)
+    return tokens
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -29,7 +51,8 @@ mongo = PyMongo(app)
 # Database: ETL
 # Collection: NFTA
 # Keys: 
-# ['keyword', 'source', 'author', 'title', 'url', 'published', 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete']
+# ['keyword', 'source', 'author', 'title', 'url', 'published', 
+# 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
 
 @app.route('/')
 def home():
@@ -39,10 +62,10 @@ def home():
 
 @app.route('/api/testdata')
 def getNewsMongo():
-    tasks = mongo.db.NFTA.find({})
+    news_data = mongo.db.NFTA.find({})
     data = []
 
-    for task in tasks:
+    for task in news_data:
         item = {
             'id': str(task['_id']),
             'source': task['source'],
@@ -52,13 +75,45 @@ def getNewsMongo():
         }
         data.append(item)
     return jsonify(data)
+    
+# TODO: Make this route dynamic w/ filter options: domain and/or sentiment category
+@app.route('/api/keywords/')
+def getKeywords():
+    # Pull headlines from database
+    news_data = mongo.db.NFTA.find({})
+    
+    headlines = []
+
+    # Will need to add filter here which filters by domain and/or sentiment
+    # Check for what is passed into the route and then filter accordingly
+    for article in news_data:
+        headline = article['title']
+        headlines.append(headline)
+
+    # Create token list of headlines
+    headlines_tokens = process_corpus(headlines)
+
+    # Determine frequency of words in token list and pull top 52
+    headlines_freq = nltk.FreqDist(headlines_tokens)
+    keywords_initial = headlines_freq.most_common(52)
+
+    # Parse NLTK anlaysis and remove junk words
+    keywords_final = []
+    for item in keywords_initial:
+        keyword = {}
+        if item[0] not in ['u', '19']:
+            keyword = {'keyword': item[0], 'frequency': item[1]}
+            keywords_final.append(keyword)
+
+    return jsonify(keywords_final)
+
 
 # Will need to add following routes for dataviz page 1 (filtering by domains): 
-# 1. Return list of domains in dataset
-# 2. Return title, compound_score, domain - default to return all or filter by domain
+# 1. /domainlist Return list of domains in dataset
+# 2. /domainscores Return title, compound_score, domain - default to return all or filter by domain
 #       Should be in format: [{title: 'headline', compound_score: score(int), domain: 'news source'}, {title: 'headline', compound_score: score(int), domain: 'news source'}]
-# 3. Return word frequency lists for headlines - default all, filter by domain, and/or filter by sentiment (pos/neg/neut)
-#       Should be in format: [{word: 'word here', frequency: frequency (int)}, {word: 'word2 here', frequency: frequency2 (int)}]
+# 3. /keywords - need to figure out how to filter by domain and/or sentiment
+#       Desired format already set up
 
 
 if __name__ == '__main__':
