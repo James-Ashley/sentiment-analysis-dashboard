@@ -56,6 +56,7 @@ def getNewsMongo():
 # Will need to add following routes for dataviz page 1 (filtering by domains): 
 # 1. Return list of domains in dataset
 # 2. Return title, compound_score, domain - default to return all or filter by domain
+#       Should be in format: [{title: 'headline', compound_score: score(int), domain: 'news source'}, {title: 'headline', compound_score: score(int), domain: 'news source'}]
 # 3. Return word frequency lists for headlines - default all, filter by domain, and/or filter by sentiment (pos/neg/neut)
 #       Should be in format: [{word: 'word here', frequency: frequency (int)}, {word: 'word2 here', frequency: frequency2 (int)}]
 
