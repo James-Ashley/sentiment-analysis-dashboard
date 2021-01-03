@@ -58,6 +58,10 @@ mongo = PyMongo(app)
 def home():
     return render_template('index.html')
 
+@app.route('/nav')
+def nav():
+    return render_template('nav.html')
+
 @app.route('/domains')
 def domains():
     return render_template('domains.html')
