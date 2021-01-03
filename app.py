@@ -88,12 +88,12 @@ def getNewsMongo():
 @app.route('/api/keywords/')
 def getKeywords():
     # Pull headlines from database
+    # Will need to add filter here which filters by domain and/or sentiment
+    # Check for what is passed into the route and then filter accordingly
     news_data = mongo.db.NFTA.find({})
     
     headlines = []
 
-    # Will need to add filter here which filters by domain and/or sentiment
-    # Check for what is passed into the route and then filter accordingly
     for article in news_data:
         headline = article['title']
         headlines.append(headline)
