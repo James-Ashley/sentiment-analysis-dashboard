@@ -8,6 +8,10 @@ console.log('this webpage is rendering')
 // May also need to fiddle with sizing of words (will depend on what happens when we limit the words going in)
 // Randomize color(s) of words in word cloud (.style('fill', FUNCTION HERE))
 
+// LOLLIPOP CHART
+// Add transition: https://www.d3-graph-gallery.com/graph/lollipop_button_data_csv.html w/ filter options
+// Edit color of circles based on color scheme chosen
+
 
 
 // Functions
