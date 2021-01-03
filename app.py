@@ -58,6 +58,10 @@ mongo = PyMongo(app)
 def home():
     return render_template('index.html')
 
+@app.route('/domains')
+def domains():
+    return render_template('domains.html')
+
 # Will need to add template rendering for all webpages as we build them
 
 @app.route('/api/testdata')
