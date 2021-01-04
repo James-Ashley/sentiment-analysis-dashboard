@@ -137,6 +137,10 @@ def getKeywords():
 
 
 # Will need to add following routes for dataviz page 1 (filtering by domains):
+# 1. /sentimentcategories - need to aggregate data
+        # Filter by domain (optional)
+        # Return frequency count of each sentiment category
+        # Format: [{'category': 'neutral', 'frequency': freq(int)}, {'category': 'positive', 'frequency': freq(int)}, {'category': 'negative', 'frequency': freq(int)}]
 # 2. /domainscores - default to return all or filter by domain
 # 3. /keywords - need to figure out how to filter by domain and/or sentiment
 
