@@ -131,8 +131,7 @@ function generateLollipopChart(data){
 };
 
 // This function creates a bubble chart of headline sentiment scores
-function bubbleChart(input, data) {
-    console.log(data.map(headline => headline.published))
+function generateBubbleChart(input, data) {
     // Create trace
     let bubbleTrace = {
         y: data.map(headline => headline.compound_score),
@@ -153,13 +152,30 @@ function bubbleChart(input, data) {
     };
     // Generate plot
     Plotly.newPlot('bubble-chart', [bubbleTrace], layout);
+};
 
-    // Bubble Plot – headlines by sentiment w/ x as date, 
-    //y as sentiment, marker size as absolute value of sentiment, 
-    //marker color is sentiment label (neg/pos/neut), 
-    //domain/sentiment value is included in hover label
+// This function generates a bar chart with a breakdown of sentiment category
+function generateBarChart(input, data) {
+    // Trace1 for the Greek Data
+    var trace1 = {
+        x: data.map(article => article.sentiment_category),
+        y: data.map(article => article.sentiment_category),
+        text: data.map(article => article.sentiment_category),
+        type: "bar",
+        orientation: "h"
+    };
 
-
+    
+    // Combining both traces
+    var data = [trace1];
+    
+    // Apply the group barmode to the layout
+    var layout = {
+        title: `Frequency of ${input} Headline Sentiment Categories`
+    };
+    
+    // Render the plot to the div tag with id "plot"
+    Plotly.newPlot("bar-chart", data, layout);
 }
 
 // Initialize webpage with domain dropdown menu
@@ -183,6 +199,6 @@ d3.json("/api/keywords").then((keywords) => {
 
 // Import the domain scores data and generate the bubble chart and bar chart
 d3.json("api/domainscores").then((domainscores) => {
-    console.log(domainscores);
-    bubbleChart('All', domainscores)
+    generateBubbleChart('All', domainscores);
+    generateBarChart('All', domainscores);
 });
