@@ -59,7 +59,7 @@ function generateWordCloud(wordArray) {
         })
         .text(function(d) { return d.text; });
     }
-}
+};
 
 // This function creates a lollipop chart of the top 10 most frequent words
 function generateLollipopChart(data){
@@ -124,15 +124,28 @@ function generateLollipopChart(data){
         .attr("r", "7")
         .style("fill", "#69b3a2")
         .attr("stroke", "black")
-}
+};
 
+// Initialize webpage with domain dropdown menu
+d3.json("api/domainlist").then((domains) => {
 
-// Import the keywords data, generate the lollipop chart and word cloud and update as the user selects filters
+    // Use domain names to generate dropdown menu
+    // Select dropdown menu
+    var dropdownOptions = d3.select('#domain-names');
+
+    // Populate dropdown menu with all domain names
+    domains.forEach(domain => {
+        dropdownOptions.append('option').text(`${domain}`).property('value', `${domain}`);
+    });
+});
+
+// Import the keywords data and generate the lollipop chart and word cloud 
 d3.json("/api/keywords").then((keywords) => {
-    console.log(keywords)
-    generateWordCloud(keywords)
-    generateLollipopChart(keywords)
+    generateWordCloud(keywords);
+    generateLollipopChart(keywords);
+});
 
-
-
-})
+// Import the domain scores data and generate the bubble chart and bar chart
+d3.json("api/domainscores").then((domainscores) => {
+    console.log(domainscores);
+});

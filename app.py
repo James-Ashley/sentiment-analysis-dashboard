@@ -55,7 +55,7 @@ mongo = PyMongo(app)
 # ['keyword', 'source', 'author', 'title', 'url', 'published',
 # 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
 
-
+# Routes that return webpages
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -86,9 +86,7 @@ def methods():
     return render_template("methods.html")
 
 
-# Will need to add template rendering for all webpages as we build them
-
-
+# Routes that return data
 @app.route("/api/testdata")
 def getNewsMongo():
     news_data = mongo.db.NFTA.find({})
@@ -139,26 +137,15 @@ def getKeywords():
 
 
 # Will need to add following routes for dataviz page 1 (filtering by domains):
-# 1. /domainlist Return list of domains in dataset
-# 2. /domainscores Return title, compound_score, domain - default to return all or filter by domain
-#       Should be in format: [{title: 'headline', compound_score: score(int), domain: 'news source'}, {title: 'headline', compound_score: score(int), domain: 'news source'}]
+# 2. /domainscores - default to return all or filter by domain
 # 3. /keywords - need to figure out how to filter by domain and/or sentiment
-#       Desired format already set up
 
 
 @app.route("/api/domainlist")
 def getDomainList():
 
-    news_data = mongo.db.NFTA.find({})
-
-    domains = []
-
-    for article in news_data:
-        domain = article["source"]
-        if {"name": domain} not in domains:
-            domain_name = {"name": domain}
-            domains.append(domain_name)
-
+    domains = mongo.db.NFTA.distinct('source')
+    
     return jsonify(domains)
 
 
@@ -173,6 +160,7 @@ def getDomainScores():
         item = {
             "title": article["title"],
             "compound_score": article["compound_score"],
+            "sentiment_category": article["sentiment_category"],
             "domain": article["source"],
         }
         domains.append(item)
