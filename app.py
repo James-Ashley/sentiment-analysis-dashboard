@@ -17,7 +17,7 @@ username = os.getenv("db_username")
 password = os.getenv("db_password")
 
 # Initialize stop words for NLTK analysis
-stop_words = stopwords.words('english')
+stop_words = stopwords.words("english")
 
 # This function tokenizes text (removes punctuation and stop words)
 # Input = list of strings
@@ -25,24 +25,25 @@ stop_words = stopwords.words('english')
 def process_corpus(titles):
     tokens = []
     for title in titles:
-        
+
         # Remove punctuation while tokenizing
-        tokenizer = RegexpTokenizer(r'\w+')
+        tokenizer = RegexpTokenizer(r"\w+")
         toks = tokenizer.tokenize(title)
-        
+
         # Convert tokens to lowercase and then remove stop words
         toks = [t.lower() for t in toks if t.lower() not in stop_words]
         tokens.extend(toks)
     return tokens
 
+
 # Initialize the Flask app
 app = Flask(__name__)
 
 # Connection to MongoDB database
-etfl_database = f'mongodb+srv://{username}:{password}@clusterprime.mpaq0.mongodb.net/ETL?retryWrites=true&w=majority'
+etfl_database = f"mongodb+srv://{username}:{password}@clusterprime.mpaq0.mongodb.net/ETL?retryWrites=true&w=majority"
 
 # Configure MongoDB
-app.config['MONGO_URI'] = os.environ.get('MONGODB_URI', etfl_database)
+app.config["MONGO_URI"] = os.environ.get("MONGODB_URI", etfl_database)
 
 # Initialize MongoDB application
 mongo = PyMongo(app)
@@ -50,64 +51,73 @@ mongo = PyMongo(app)
 # Format of db in MONGODB:
 # Database: ETL
 # Collection: NFTA
-# Keys: 
-# ['keyword', 'source', 'author', 'title', 'url', 'published', 
+# Keys:
+# ['keyword', 'source', 'author', 'title', 'url', 'published',
 # 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
 
-@app.route('/')
+
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/nav')
+
+@app.route("/nav")
 def nav():
-    return render_template('nav.html')
+    return render_template("nav.html")
 
-@app.route('/domains')
+
+@app.route("/domains")
 def domains():
-    return render_template('domains.html')
+    return render_template("domains.html")
 
-@app.route('/about')
+
+@app.route("/about")
 def about():
-    return render_template('about.html')
+    return render_template("about.html")
 
-@app.route('/keywords')
+
+@app.route("/keywords")
 def keywords():
-    return render_template('keywords.html')
+    return render_template("keywords.html")
 
-@app.route('/methods')
+
+@app.route("/methods")
 def methods():
-    return render_template('methods.html')
+    return render_template("methods.html")
+
 
 # Will need to add template rendering for all webpages as we build them
 
-@app.route('/api/testdata')
+
+@app.route("/api/testdata")
 def getNewsMongo():
     news_data = mongo.db.NFTA.find({})
     data = []
 
     for task in news_data:
         item = {
-            'id': str(task['_id']),
-            'source': task['source'],
-            'title': task['title'],
-            'published': task['published'],
-            'compound_score': task['compound_score']
+            "id": str(task["_id"]),
+            "source": task["source"],
+            "title": task["title"],
+            "published": task["published"],
+            "compound_score": task["compound_score"],
         }
         data.append(item)
     return jsonify(data)
-    
+
+
 # TODO: Make this route dynamic w/ filter options: domain and/or sentiment category
-@app.route('/api/keywords/')
+@app.route("/api/keywords/")
 def getKeywords():
     # Pull headlines from database
     # Will need to add filter here which filters by domain and/or sentiment
     # Check for what is passed into the route and then filter accordingly
     news_data = mongo.db.NFTA.find({})
-    
+
     headlines = []
 
     for article in news_data:
-        headline = article['title']
+        headline = article["title"]
         headlines.append(headline)
 
     # Create token list of headlines
@@ -121,21 +131,22 @@ def getKeywords():
     keywords_final = []
     for item in keywords_initial:
         keyword = {}
-        if item[0] not in ['u', '19']:
-            keyword = {'keyword': item[0], 'frequency': item[1]}
+        if item[0] not in ["u", "19"]:
+            keyword = {"keyword": item[0], "frequency": item[1]}
             keywords_final.append(keyword)
 
     return jsonify(keywords_final)
 
 
-# Will need to add following routes for dataviz page 1 (filtering by domains): 
+# Will need to add following routes for dataviz page 1 (filtering by domains):
 # 1. /domainlist Return list of domains in dataset
 # 2. /domainscores Return title, compound_score, domain - default to return all or filter by domain
 #       Should be in format: [{title: 'headline', compound_score: score(int), domain: 'news source'}, {title: 'headline', compound_score: score(int), domain: 'news source'}]
 # 3. /keywords - need to figure out how to filter by domain and/or sentiment
 #       Desired format already set up
 
-@app.route('/api/domainlist')
+
+@app.route("/api/domainlist")
 def getDomainList():
 
     news_data = mongo.db.NFTA.find({})
@@ -143,15 +154,32 @@ def getDomainList():
     domains = []
 
     for article in news_data:
-        domain = article['source']
-        if {'name': domain} not in domains:
-            domain_name = {'name': domain}
+        domain = article["source"]
+        if {"name": domain} not in domains:
+            domain_name = {"name": domain}
             domains.append(domain_name)
 
     return jsonify(domains)
 
 
+@app.route("/api/domainscores")
+def getDomainScores():
+
+    news_data = mongo.db.NFTA.find({})
+
+    domains = []
+
+    for article in news_data:
+        item = {
+            "title": article["title"],
+            "compound_score": article["compound_score"],
+            "domain": article["source"],
+        }
+        domains.append(item)
+
+    return jsonify(domains)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
+
