@@ -145,7 +145,7 @@ def getKeywords():
 def getDomainList():
 
     domains = mongo.db.NFTA.distinct('source')
-    
+
     return jsonify(domains)
 
 
@@ -162,6 +162,7 @@ def getDomainScores():
             "compound_score": article["compound_score"],
             "sentiment_category": article["sentiment_category"],
             "domain": article["source"],
+            "published": article["published"]
         }
         domains.append(item)
 

@@ -12,6 +12,10 @@ console.log('this webpage is rendering')
 // Add transition: https://www.d3-graph-gallery.com/graph/lollipop_button_data_csv.html w/ filter options
 // Edit color of circles based on color scheme chosen
 
+// BUBBLE CHART
+// Adjust colors
+// Tweak hover text
+// Add time series animation (?)
 
 
 // Functions
@@ -126,6 +130,38 @@ function generateLollipopChart(data){
         .attr("stroke", "black")
 };
 
+// This function creates a bubble chart of headline sentiment scores
+function bubbleChart(input, data) {
+    console.log(data.map(headline => headline.published))
+    // Create trace
+    let bubbleTrace = {
+        y: data.map(headline => headline.compound_score),
+        x: data.map(headline => headline.published),
+        mode: 'markers',
+        marker: {
+            color: data.map(headline => (Math.abs(headline.compound_score) + 1) *10),
+            size: data.map(headline => (Math.abs(headline.compound_score) + 1) *10), 
+            colorscale: 'Earth'
+        }
+    };
+    // Create layout
+    let layout = {
+        title: `Sentiment Scores of ${input} Headlines`,
+        showlegend: false,
+        xaxis: { title: 'Date' },
+        yaxis: { title: 'Compound Sentiment Score' }
+    };
+    // Generate plot
+    Plotly.newPlot('bubble-chart', [bubbleTrace], layout);
+
+    // Bubble Plot – headlines by sentiment w/ x as date, 
+    //y as sentiment, marker size as absolute value of sentiment, 
+    //marker color is sentiment label (neg/pos/neut), 
+    //domain/sentiment value is included in hover label
+
+
+}
+
 // Initialize webpage with domain dropdown menu
 d3.json("api/domainlist").then((domains) => {
 
@@ -148,4 +184,5 @@ d3.json("/api/keywords").then((keywords) => {
 // Import the domain scores data and generate the bubble chart and bar chart
 d3.json("api/domainscores").then((domainscores) => {
     console.log(domainscores);
+    bubbleChart('All', domainscores)
 });
