@@ -66,6 +66,18 @@ def nav():
 def domains():
     return render_template('domains.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/keywords')
+def keywords():
+    return render_template('keywords.html')
+
+@app.route('/methods')
+def methods():
+    return render_template('methods.html')
+
 # Will need to add template rendering for all webpages as we build them
 
 @app.route('/api/testdata')
@@ -122,6 +134,23 @@ def getKeywords():
 #       Should be in format: [{title: 'headline', compound_score: score(int), domain: 'news source'}, {title: 'headline', compound_score: score(int), domain: 'news source'}]
 # 3. /keywords - need to figure out how to filter by domain and/or sentiment
 #       Desired format already set up
+
+@app.route('/api/domainlist')
+def getDomainList():
+
+    news_data = mongo.db.NFTA.find({})
+
+    domains = []
+
+    for article in news_data:
+        domain = article['source']
+        if {'name': domain} not in domains:
+            domain_name = {'name': domain}
+            domains.append(domain_name)
+
+    return jsonify(domains)
+
+
 
 
 if __name__ == '__main__':
