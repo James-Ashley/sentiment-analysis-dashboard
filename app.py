@@ -191,10 +191,12 @@ def getDomainScores():
 
 @app.route("/api/domainscores/<domain_name>", methods=["GET"])
 def getFilteredDomainScores(domain_name):
+    if domain_name == 'all':
+        news_data = mongo.db.NFTA.find({})
+    else:
+        filter = {"source": domain_name}
 
-    filter = {"source": domain_name}
-
-    news_data = mongo.db.NFTA.find(filter)
+        news_data = mongo.db.NFTA.find(filter)
 
     domains = []
 

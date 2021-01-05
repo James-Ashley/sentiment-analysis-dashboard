@@ -202,3 +202,5 @@ d3.json("api/domainscores").then((domainscores) => {
     generateBubbleChart('All', domainscores);
     generateBarChart('All', domainscores);
 });
+
+// Event listener here
