@@ -59,8 +59,6 @@ mongo = PyMongo(app)
 # 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
 
 # Routes that return webpages
-
-
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -91,31 +89,24 @@ def methods():
     return render_template("methods.html")
 
 
-# Routes that return data
-@app.route("/api/testdata")
-def getNewsMongo():
-    news_data = mongo.db.NFTA.find({})
-    data = []
+# Routes that return data from MongoDB
+@app.route("/api/domainlist")
+def getDomainList():
 
-    for task in news_data:
-        item = {
-            "id": str(task["_id"]),
-            "source": task["source"],
-            "title": task["title"],
-            "published": task["published"],
-            "compound_score": task["compound_score"],
-        }
-        data.append(item)
-    return jsonify(data)
+    domains = mongo.db.NFTA.distinct("source")
 
+    return jsonify(domains)
 
 # TODO: Make this route dynamic w/ filter options: domain and/or sentiment category
-@app.route("/api/keywords/")
-def getKeywords():
-    # Pull headlines from database
-    # Will need to add filter here which filters by domain and/or sentiment
-    # Check for what is passed into the route and then filter accordingly
-    news_data = mongo.db.NFTA.find({})
+@app.route("/api/keywords/<domain_name>", methods=["GET"])
+def getFilteredKeywords(domain_name):
+    # Check if filter was included
+    if domain_name == 'all':
+        news_data = mongo.db.NFTA.find({})
+    else:
+        filter = {"source": domain_name}
+
+        news_data = mongo.db.NFTA.find(filter)
 
     headlines = []
 
@@ -141,56 +132,9 @@ def getKeywords():
     return jsonify(keywords_final)
 
 
-# Will need to add following routes for dataviz page 1 (filtering by domains):
-# 1. /sentimentcategories - need to aggregate data
-# Filter by domain (optional)
-# Return frequency count of each sentiment category
-# Format: [{'category': 'neutral', 'frequency': freq(int)}, {'category': 'positive', 'frequency': freq(int)}, {'category': 'negative', 'frequency': freq(int)}]
-# 2. /domainscores - default to return all or filter by domain
-# 3. /keywords - need to figure out how to filter by domain and/or sentiment
-
-
-@app.route("/api/domainlist")
-def getDomainList():
-
-    domains = mongo.db.NFTA.distinct("source")
-
-    return jsonify(domains)
-
-
-@app.route("/api/domainscores")
-def getDomainScores():
-    news_data = mongo.db.NFTA.find({})
-
-    domains = []
-
-    for article in news_data:
-        item = {
-            "title": article["title"],
-            "compound_score": article["compound_score"],
-            "sentiment_category": article["sentiment_category"],
-            "domain": article["source"],
-            "published": article["published"],
-        }
-        domains.append(item)
-
-    df = pd.DataFrame(domains)
-
-    count = dict(df["sentiment_category"].value_counts())
-
-    count_list = []
-
-    for key, value in count.items():
-        x = {"category": key, "frequency": int(value)}
-        count_list.append(x)
-
-    domain_scores = {"article_data": domains, "category_counts": count_list}
-
-    return jsonify(domain_scores)
-
-
 @app.route("/api/domainscores/<domain_name>", methods=["GET"])
 def getFilteredDomainScores(domain_name):
+    # Check if filter was included
     if domain_name == 'all':
         news_data = mongo.db.NFTA.find({})
     else:
@@ -209,8 +153,20 @@ def getFilteredDomainScores(domain_name):
             "published": article["published"],
         }
         domains.append(item)
+    
+    df = pd.DataFrame(domains)
 
-    return jsonify(domains)
+    count = dict(df["sentiment_category"].value_counts())
+
+    count_list = []
+
+    for key, value in count.items():
+        x = {"category": key, "frequency": int(value)}
+        count_list.append(x)
+
+    domain_scores = {"article_data": domains, "category_counts": count_list}
+
+    return jsonify(domain_scores)
 
 
 if __name__ == "__main__":
