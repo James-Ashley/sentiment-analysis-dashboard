@@ -158,9 +158,8 @@ function generateBubbleChart(input, data) {
 function generateBarChart(input, data) {
     // Trace1 for sentiment categories
     var trace1 = {
-        x: data.map(article => article.sentiment_category),
-        y: data.map(article => article.sentiment_category),
-        text: data.map(article => article.sentiment_category),
+        x: data.map(category => category.frequency),
+        y: data.map(category => category.category),
         type: "bar",
         orientation: "h"
     };
@@ -178,6 +177,24 @@ function generateBarChart(input, data) {
     Plotly.newPlot("bar-chart", data, layout);
 }
 
+//adding in zoom capability to the bubble chart
+function zoom() {
+    var min = 0.45 * Math.random();
+    var max = 0.55 + 0.45 * Math.random();
+    Plotly.animate('bubble-chart', {
+      layout: {
+        xaxis: {range: [min, max]},
+        yaxis: {range: [min, max]}
+      }
+    }, {
+      transition: {
+        duration: 500,
+        easing: 'cubic-in-out'
+      }
+    })
+  };
+
+
 // Initialize webpage with domain dropdown menu
 d3.json("api/domainlist").then((domains) => {
 
@@ -192,15 +209,15 @@ d3.json("api/domainlist").then((domains) => {
 });
 
 // Import the keywords data and generate the lollipop chart and word cloud 
-d3.json("/api/keywords").then((keywords) => {
+d3.json("/api/keywords/all").then((keywords) => {
     generateWordCloud(keywords);
     generateLollipopChart(keywords);
 });
 
 // Import the domain scores data and generate the bubble chart and bar chart
-d3.json("api/domainscores").then((domainscores) => {
-    generateBubbleChart('All', domainscores);
-    generateBarChart('All', domainscores);
+d3.json("api/domainscores/all").then((domainscores) => {
+    generateBubbleChart('All', domainscores.article_data);
+    generateBarChart('All', domainscores.category_counts);
 });
 
 // Event listener here
