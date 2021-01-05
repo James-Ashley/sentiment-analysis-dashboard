@@ -97,7 +97,7 @@ def getDomainList():
 
     return jsonify(domains)
 
-# TODO: Make this route dynamic w/ filter options: domain and/or sentiment category
+
 @app.route("/api/keywords/<domain_name>", methods=["GET"])
 def getFilteredKeywords(domain_name):
     # Check if filter was included
