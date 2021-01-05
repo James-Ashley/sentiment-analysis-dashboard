@@ -5,8 +5,8 @@ d3.json('api/bigrams/headlines').then( function(data) {
 
     // set the dimensions and margins of the graph
 var margin = {top: 20, right: 30, bottom: 20, left: 30},
-width = 800 - margin.left - margin.right,
-height = 1000 - margin.top - margin.bottom;
+width = 600 - margin.left - margin.right,
+height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#arc-diagram")
@@ -19,7 +19,6 @@ var svg = d3.select("#arc-diagram")
 
   // List of node names
   var allNodes = data.nodes.map(function(d){return d.id})
-  console.log(allNodes)
 
   // A linear scale to position the nodes on the y axis
   var y = d3.scalePoint()
@@ -27,18 +26,18 @@ var svg = d3.select("#arc-diagram")
     .domain(allNodes)
 
   // Add the circle for the nodes
-  svg
+  var nodes = svg
     .selectAll("mynodes")
     .data(data.nodes)
     .enter()
     .append("circle")
       .attr("cx", 30)
       .attr("cy", function(d){ return(y(d.id))})
-      .attr("r", 4)
+      .attr("r", 6)
       .style("fill", "#69b3a2")
 
   // And give them a label
-  svg
+  var labels = svg
     .selectAll("mylabels")
     .data(data.nodes)
     .enter()
@@ -52,22 +51,39 @@ var svg = d3.select("#arc-diagram")
   // Add links between nodes. Here is the tricky part.
 
   // Add the links
-  svg
+  var links = svg
     .selectAll('mylinks')
     .data(data.links)
     .enter()
     .append('path')
     .attr('d', function (d) {
-      start = y(d.source)    // X position of start node on the X axis
-      end = y(d.target)      // X position of end node
-      return ['M', 30, start,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
+      start = y(d.source)    // y position of start node on the y axis
+      end = y(d.target)      // y position of end node
+      return ['M', 30, start,    // the arc starts at the coordinate 30, start (where the starting node is)
         'A',                            // This means we're gonna build an elliptical arc
         (start - end)/2*4, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
         (start - end)/2, 0, 0, ',',
-        start < end ? 1 : 0, 30, ',', end] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
+        start < end ? 1 : 0, 30, ',', end] // We always want the arc on top. So if end is before start, putting 0 here turns the arc upside down.
         .join(' ');
     })
     .style("fill", "none")
     .attr("stroke", "black")
+
+    nodes
+      .on('mouseover', function (d) {
+        // Highlight the nodes
+        nodes.style('fill', "#B8B8B8")
+        d3.select(this).style('fill', '#69b3b2')
+        // Highlight the connections
+        links
+          .style('stroke', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? '#69b3b2' : '#b8b8b8';})
+          .style('stroke-width', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? 2 : 1;})
+      })
+      .on('mouseout', function (d) {
+        nodes.style('fill', "#69b3a2")
+        links
+          .style('stroke', 'black')
+          .style('stroke-width', '1')
+      })
 
 })
