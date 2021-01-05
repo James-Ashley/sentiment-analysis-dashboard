@@ -20,7 +20,7 @@ console.log('this webpage is rendering')
 
 // Functions
 
-// This function generates a word cloud with word size proportional to word frequency. 
+// This function generates a word cloud with word size proportional to word frequency using D3-cloud. 
 // Required format of data: [{keyword: 'word', frequency: int}, {keyword: 'word', frequency: int}]
 function generateWordCloud(wordArray) {
     // set the dimensions and margins of the graph
@@ -65,7 +65,7 @@ function generateWordCloud(wordArray) {
     }
 };
 
-// This function creates a lollipop chart of the top 10 most frequent words
+// This function creates a lollipop chart of the top 10 most frequent words using D3
 function generateLollipopChart(data){
     // Set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 40, left: 100},
@@ -130,7 +130,7 @@ function generateLollipopChart(data){
         .attr("stroke", "black")
 };
 
-// This function creates a bubble chart of headline sentiment scores
+// This function creates a bubble chart of headline sentiment scores using Plotly
 function generateBubbleChart(input, data) {
     // Create trace
     let bubbleTrace = {
@@ -154,29 +154,46 @@ function generateBubbleChart(input, data) {
     Plotly.newPlot('bubble-chart', [bubbleTrace], layout);
 };
 
-// This function generates a bar chart with a breakdown of sentiment category
+// This function generates a bar chart with a breakdown of sentiment category using Plotly
 function generateBarChart(input, data) {
-    // Trace1 for the Greek Data
+    // Trace1 for sentiment categories
     var trace1 = {
-        x: data.map(article => article.sentiment_category),
-        y: data.map(article => article.sentiment_category),
-        text: data.map(article => article.sentiment_category),
+        x: data.map(category => category.frequency),
+        y: data.map(category => category.category),
         type: "bar",
         orientation: "h"
     };
 
     
-    // Combining both traces
+    // Turning trace into array
     var data = [trace1];
     
-    // Apply the group barmode to the layout
+    // Set layout
     var layout = {
         title: `Frequency of ${input} Headline Sentiment Categories`
     };
     
-    // Render the plot to the div tag with id "plot"
+    // Render the plot in the html
     Plotly.newPlot("bar-chart", data, layout);
 }
+
+//adding in zoom capability to the bubble chart
+function zoom() {
+    var min = 0.45 * Math.random();
+    var max = 0.55 + 0.45 * Math.random();
+    Plotly.animate('bubble-chart', {
+      layout: {
+        xaxis: {range: [min, max]},
+        yaxis: {range: [min, max]}
+      }
+    }, {
+      transition: {
+        duration: 500,
+        easing: 'cubic-in-out'
+      }
+    })
+  };
+
 
 // Initialize webpage with domain dropdown menu
 d3.json("api/domainlist").then((domains) => {
@@ -192,13 +209,15 @@ d3.json("api/domainlist").then((domains) => {
 });
 
 // Import the keywords data and generate the lollipop chart and word cloud 
-d3.json("/api/keywords").then((keywords) => {
+d3.json("/api/keywords/all").then((keywords) => {
     generateWordCloud(keywords);
     generateLollipopChart(keywords);
 });
 
 // Import the domain scores data and generate the bubble chart and bar chart
-d3.json("api/domainscores").then((domainscores) => {
-    generateBubbleChart('All', domainscores);
-    generateBarChart('All', domainscores);
+d3.json("api/domainscores/all").then((domainscores) => {
+    generateBubbleChart('All', domainscores.article_data);
+    generateBarChart('All', domainscores.category_counts);
 });
+
+// Event listener here
