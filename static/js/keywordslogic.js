@@ -91,4 +91,23 @@ d3.json('api/bigrams/headlines').then( function(data) {
                 .style("font-size", 10 )
         })
 
+    // Select dropdown menu
+    var nodeOrder = d3.select('#node-orders');
+
+    // Function which reorders data
+    function reorderData(){
+        let selected = d3.select('#node-orders').property('value');
+        if (selected === 'PMI') {
+            var sorted_data = data.sort((a, b) => b.links.value - a.links.value);
+            console.log(sorted_data)
+        }
+        //if (selected === 'sentiment'){
+
+        //}
+
+    }
+
+    // Create event listener
+    nodeOrder.on('change', reorderData)
+
 })
