@@ -169,13 +169,11 @@ def getFilteredDomainScores(domain_name):
     return jsonify(domain_scores)
 
 
-@app.route("/api/bigrams/<collection>", methods=["GET"])
-def getFilteredBigrams(collection):
-    if collection == 'headlines':
-        bigrams_data = mongo.db.headline_bigrams.find({})
+@app.route("/api/bigrams/<text_source>", methods=["GET"])
+def getFilteredBigrams(text_source):
+    filter = {'text_source': text_source}
 
-    if collection == 'full-text':
-        bigrams_data = mongo.db.full_text_bigrams.find({})
+    bigrams_data = mongo.db.bigrams.find(filter)
 
     bigrams = {}
 
