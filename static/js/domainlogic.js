@@ -23,6 +23,9 @@ console.log('this webpage is rendering')
 // This function generates a word cloud with word size proportional to word frequency using D3-cloud. 
 // Required format of data: [{keyword: 'word', frequency: int}, {keyword: 'word', frequency: int}]
 function generateWordCloud(wordArray) {
+    // Remove chart already present
+    word_cloud = d3.select("#word-cloud");
+    word_cloud.select("svg").remove();
     // set the dimensions and margins of the graph
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 450 - margin.left - margin.right,
@@ -67,6 +70,9 @@ function generateWordCloud(wordArray) {
 
 // This function creates a lollipop chart of the top 10 most frequent words using D3
 function generateLollipopChart(data){
+    // Remove chart already present
+    lollipop = d3.select("#lollipop-chart");
+    lollipop.select("svg").remove();
     // Set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 40, left: 100},
         width = 460 - margin.left - margin.right,
@@ -221,3 +227,7 @@ d3.json("api/domainscores/all").then((domainscores) => {
 });
 
 // Event listener here
+// Get value clicked on by user
+// On change update charts:
+    // Add this value to the end of the string 'api/domainscores/' and the end of the string 'api/keywords/' 
+    // Perform JSON calls w/ these strings and replot charts
