@@ -23,9 +23,11 @@ console.log('this webpage is rendering')
 // This function generates a word cloud with word size proportional to word frequency using D3-cloud. 
 // Required format of data: [{keyword: 'word', frequency: int}, {keyword: 'word', frequency: int}]
 function generateWordCloud(wordArray) {
+
     // Remove chart already present
     word_cloud = d3.select("#word-cloud");
     word_cloud.select("svg").remove();
+
     // set the dimensions and margins of the graph
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 450 - margin.left - margin.right,
@@ -58,7 +60,7 @@ function generateWordCloud(wordArray) {
     .selectAll("text")
         .data(words)
     .enter().append("text")
-        .style("font-size", function(d) { return d.size; })
+        .style("font-size", function(d) { return `${d.size}px`; })
         .style("fill", "#9f0438")
         .attr("text-anchor", "middle")
         .attr("transform", function(d) {
@@ -73,6 +75,7 @@ function generateLollipopChart(data){
     // Remove chart already present
     lollipop = d3.select("#lollipop-chart");
     lollipop.select("svg").remove();
+
     // Set the dimensions and margins of the graph
     var margin = {top: 10, right: 30, bottom: 40, left: 100},
         width = 460 - margin.left - margin.right,
