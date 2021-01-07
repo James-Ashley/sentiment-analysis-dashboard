@@ -7,7 +7,7 @@ import nltk
 from nltk.tokenize import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 import pandas as pd
-import news_table
+
 
 # Pull passwords from your .env file for when you are working locally
 # TODO: Create a .env file at the same level as this file - include these two lines:
