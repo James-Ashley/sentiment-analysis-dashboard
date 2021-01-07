@@ -212,7 +212,7 @@ d3.json("api/domainlist").then((domains) => {
     var dropdownOptions = d3.select('#domain-names');
 
     // Add "all" option to dropdown menu
-    dropdownOptions.append('option').text('-------').property('value', 'all')
+    dropdownOptions.append('option').text('---').property('value', 'all')
 
     // Add domain names as dropdown menu options
     domains.forEach(domain => {
@@ -252,5 +252,8 @@ function changeData(){
     changeKeywordData(selected)
   };
 
+// Select dropdown menu
+var dropdown = d3.select('#domain-names')
+
 // Create event listener which listens for change in dropdown menu
-nodeOrder.on('change', changeData);
+dropdown.on('change', changeData);
