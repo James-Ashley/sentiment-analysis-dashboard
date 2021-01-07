@@ -252,8 +252,19 @@ function changeData(){
     changeKeywordData(selected)
   };
 
+// CThis function clears filter and returns to all data
+function clearFilter(){
+    location.reload()
+};
+
 // Select dropdown menu
 var dropdown = d3.select('#domain-names')
 
-// Create event listener which listens for change in dropdown menu
+// Select the clear filter button
+var clearFilterButton = d3.select('#refresh-btn');
+
+// Create event handler which listens for change in dropdown menu
 dropdown.on('change', changeData);
+
+// Create event handler which listens for click on clear filter button
+clearFilterButton.on('click', clearFilter);
