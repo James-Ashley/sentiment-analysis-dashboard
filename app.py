@@ -87,9 +87,9 @@ def keywords():
 
 @app.route("/methods")
 def methods():
-    x = news_table.datatable()
+    # x = news_table.datatable()
 
-    return render_template("methods.html", data_table=x)
+    return render_template("methods.html")
 
 
 # Routes that return data from MongoDB
