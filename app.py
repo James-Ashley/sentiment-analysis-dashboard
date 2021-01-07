@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 import pandas as pd
 
+
 # Pull passwords from your .env file for when you are working locally
 # TODO: Create a .env file at the same level as this file - include these two lines:
 # db_username='mongodbusername'
@@ -43,7 +44,7 @@ def process_corpus(titles):
 app = Flask(__name__)
 
 # Connection to MongoDB database
-etfl_database = f"mongodb+srv://{username}:{password}@clusterprime.mpaq0.mongodb.net/ETL?retryWrites=true&w=majority"
+etfl_database = f"mongodb+srv://{username}:{password}@cluster0.32kwu.mongodb.net/ETL?retryWrites=true&w=majority"
 
 # Configure MongoDB
 app.config["MONGO_URI"] = os.environ.get("MONGODB_URI", etfl_database)
@@ -86,6 +87,8 @@ def keywords():
 
 @app.route("/methods")
 def methods():
+    # x = news_table.datatable()
+
     return render_template("methods.html")
 
 
@@ -101,7 +104,7 @@ def getDomainList():
 @app.route("/api/keywords/<domain_name>", methods=["GET"])
 def getFilteredKeywords(domain_name):
     # Check if filter was included
-    if domain_name == 'all':
+    if domain_name == "all":
         news_data = mongo.db.NFTA.find({})
     else:
         filter = {"source": domain_name}
@@ -135,7 +138,7 @@ def getFilteredKeywords(domain_name):
 @app.route("/api/domainscores/<domain_name>", methods=["GET"])
 def getFilteredDomainScores(domain_name):
     # Check if filter was included
-    if domain_name == 'all':
+    if domain_name == "all":
         news_data = mongo.db.NFTA.find({})
     else:
         filter = {"source": domain_name}
@@ -153,7 +156,7 @@ def getFilteredDomainScores(domain_name):
             "published": article["published"],
         }
         domains.append(item)
-    
+
     df = pd.DataFrame(domains)
 
     count = dict(df["sentiment_category"].value_counts())
@@ -171,19 +174,64 @@ def getFilteredDomainScores(domain_name):
 
 @app.route("/api/bigrams/<text_source>", methods=["GET"])
 def getFilteredBigrams(text_source):
-    filter = {'text_source': text_source}
+    filter = {"text_source": text_source}
 
     bigrams_data = mongo.db.bigrams.find(filter)
 
     bigrams = {}
 
     for obj in bigrams_data:
-        bigrams = {
-            "nodes": obj['nodes'],
-            "links": obj['links']
-        }
+        bigrams = {"nodes": obj["nodes"], "links": obj["links"]}
 
     return jsonify(bigrams)
+
+
+# @app.route("/api/datatable")
+# def getDataTable():
+#     data = mongo.db.NFTA.find({})
+
+#     news = {"data": []}
+
+#     for article in data:
+#         item = {
+#             "Keyword": article["keyword"],
+#             "Source": article["source"],
+#             "Author": article["author"],
+#             "Title": article["title"],
+#             "URL": article["url"],
+#             "Published": article["published"],
+#             "Compound Score": article["compound_score"],
+#             "Sentiment Category": article["sentiment_category"],
+#         }
+#         news["data"].append(item)
+
+#     return jsonify(news)
+
+
+@app.route("/api/domainsentiment")
+def getDomainSentiment():
+    data = mongo.db.NFTA.find({})
+
+    news = []
+
+    for article in data:
+        item = {
+            "sentiment_category": article["sentiment_category"],
+            "domain": article["source"],
+        }
+        news.append(item)
+
+    df = pd.DataFrame(news)
+
+    df2 = df.groupby(["domain", "sentiment_category"])["domain"].size().to_dict()
+
+    stacked_bar = []
+
+    for key, value in df2.items():
+        x = {"source": key[0], "sentiment": key[1], "count": value}
+        stacked_bar.append(x)
+
+    return jsonify(stacked_bar)
 
 
 if __name__ == "__main__":

@@ -1,47 +1,42 @@
 // Reference: https://medium.com/@tbarrasso/plotly-tip-6-positioning-axis-titles-in-horizontal-bar-chart-56b0713f9745 
 
 // This function plots a stacked bar chart
-function generateStackedChart() {
-    var neg = {
-        y: ['giraffes', 'orangutans', 'monkeys'],
-        x: [20, 14, 23],
-        name: 'Negative Headlines',
-        type: 'bar',
-        orientation: 'h'
-      };
+function generateStackedChart(data) {
+  let neg_data = data.filter(object => object.sentiment === 'negative')
+  let pos_data = data.filter(object => object.sentiment === 'positive')
+  let neu_data = data.filter(object => object.sentiment === 'neutral')
+  console.log(neu_data)
+  var neg = {
+      x: neg_data.map(domain => domain.source),
+      y: neg_data.map(domain => domain.count),
+      name: 'Negative',
+      type: 'bar',
+  };
+    
+  var neu = {
+    x: neu_data.map(domain => domain.source),
+    y: neu_data.map(domain => domain.count),
+    name: 'Neutral',
+    type: 'bar'
+  };
+  
+  var pos = {
+    x: pos_data.map(domain => domain.source),
+    y: pos_data.map(domain => domain.count),
+    name: 'Positive',
+    type: 'bar'
+  };
       
-    var pos = {
-        y: ['giraffes', 'orangutans', 'monkeys'],
-        x: [12, 18, 29],
-        name: 'Positive Headlines',
-        type: 'bar',
-        orientation: 'h'
-      };
+  var data = [neg, neu, pos];
       
-    var data = [neg, pos];
+  var layout = {barmode: 'stack', bargroupgap: 0.1, xaxis: {zeroline: false}};
       
-    var layout = {barmode: 'stack', bargroupgap: 0.1, xaxis: {zeroline: false}};
-      
-    Plotly.newPlot('stacked-chart', data, layout);
+  Plotly.newPlot('stacked-chart', data, layout);
 
-    document.getElementById('stacked-chart').on('plotly_afterplot', function() {
-        var yAxisLabels = [].slice.call(document.querySelectorAll('[class^="yaxislayer"] .ytick text, [class*=" yaxislayer"] .ytick text'))
-        var bar = document.querySelector('.plot .barlayer .bars path')
-        var barHeight = bar.getBBox().height
-        var offset = 12
-        
-        for (var i = 0; i < yAxisLabels.length; i++) {
-          var yAxisLabel = yAxisLabels[i];
-          yAxisLabel.setAttribute('text-anchor', 'start')
-          yAxisLabel.setAttribute('y', yAxisLabel.getAttribute('y') - (barHeight / 2) - offset)
-        }
-      })
-}
+};
 
 
 // Initialize the plot 
-d3.json("api/domainscores/all").then((sent_cats) => {
-    console.log(sent_cats)
+d3.json("api/domainsentiment").then((domain_sent) => {
+    generateStackedChart(domain_sent)
 });
-
-generateStackedChart()
