@@ -1,5 +1,6 @@
 // This function creates an arc diagram
 function createArc(data) {
+
         // Remove chart already present
         d3.select("svg").remove();
         
@@ -62,10 +63,10 @@ function createArc(data) {
                 start = y(d.source)    // y position of start node on the y axis
                 end = y(d.target)      // y position of end node
                 return ['M', 100, start,    // the arc starts at the coordinate 100, start (where the starting node is)
-                    'A',                            // This means we're gonna build an elliptical arc
+                    'A',                            // Build an elliptical arc
                     (start - end)/2*2, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
                     (start - end)/2, 0, 0, ',',
-                    start < end ? 1 : 0, 100, ',', end] // We always want the arc on top. So if the end is before start, putting 0 here turns the arc upside down.
+                    start < end ? 1 : 0, 100, ',', end] // Make sure the arc is on top, so if the end is before start, putting 0 here turns the arc upside down.
                     .join(' ');
             })
             .style("fill", "none")

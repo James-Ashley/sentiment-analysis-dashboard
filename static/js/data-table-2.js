@@ -1,3 +1,4 @@
+// This function makes an API call to pull data and then returns a formatted datatable
 function setupData() {
     $(document).ready(function () {
         $('#data').DataTable({
@@ -22,4 +23,5 @@ function setupData() {
     });
 }
 
+// Create event listener so that datatable initializes on page load
 $(window).on("load", setupData);

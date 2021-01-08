@@ -8,7 +8,6 @@ from nltk.tokenize import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 import pandas as pd
 
-
 # Pull passwords from your .env file for when you are working locally
 # TODO: Create a .env file at the same level as this file - include these two lines:
 # db_username='mongodbusername'
@@ -36,7 +35,6 @@ def process_corpus(titles):
         toks = [t.lower() for t in toks if t.lower() not in stop_words]
         tokens.extend(toks)
     return tokens
-
 
 # Initialize the Flask app
 app = Flask(__name__)

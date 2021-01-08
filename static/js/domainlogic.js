@@ -3,19 +3,8 @@ console.log('this webpage is rendering')
 
 //TODO: 
 
-//WORD CLOUD
-// Determine how many words to put in word cloud (determined by size of word cloud)
-// May also need to fiddle with sizing of words (will depend on what happens when we limit the words going in)
-// Randomize color(s) of words in word cloud (.style('fill', FUNCTION HERE))
-
-// LOLLIPOP CHART
-// Add transition: https://www.d3-graph-gallery.com/graph/lollipop_button_data_csv.html w/ filter options
-// Edit color of circles based on color scheme chosen
-
 // BUBBLE CHART
-// Adjust colors
 // Tweak hover text
-// Add time series animation (?)
 
 
 // Functions
@@ -41,13 +30,13 @@ function generateWordCloud(wordArray) {
     .domain([d3.min(wordArray.map(function(d) {return d.frequency})), d3.max(wordArray.map(function(d) {return d.frequency}))])
     .range([20,70])
 
-    // Set colors
+    // Set color scale
     var colors = ['#104b6d', '#a3d2a0', '#6f2b6e', '#5ac4f8']
     var colorScale = d3.scaleQuantile()
         .domain([d3.min(wordArray.map(function(d) {return d.frequency})), d3.max(wordArray.map(function(d) {return d.frequency}))])
         .range(colors);
 
-    // append the svg object to the body of the page
+    // Append the svg object to the body of the page
     var svg = d3.select("#word-cloud").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -55,7 +44,7 @@ function generateWordCloud(wordArray) {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    // Constructs a new cloud layout instance. It runs an algorithm to find the position of words that suits your requirements
+    // Construct a new cloud layout instance
     var layout = d3.layout.cloud()
         .size([width, height])
         .words(wordArray.map(function(d) { return {text: d.keyword, size:d.frequency, color:colorScale(d.frequency)}; }))
@@ -66,7 +55,6 @@ function generateWordCloud(wordArray) {
         layout.start();
 
     // This function takes the output of 'layout' above and draw the words
-    // Better not to touch it. To change parameters, play with the 'layout' variable above
     function draw(words) {
     svg
         .append("g")
@@ -86,6 +74,7 @@ function generateWordCloud(wordArray) {
 
 // This function creates a lollipop chart of the top 10 most frequent words using D3
 function generateLollipopChart(data){
+
     // Remove chart already present
     lollipop = d3.select("#lollipop-chart");
     lollipop.select("svg").remove();
@@ -95,7 +84,7 @@ function generateLollipopChart(data){
         width = 460 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
-    // append the svg object to the body of the page
+    // Append the svg object to the body of the page
     var svg = d3.select("#lollipop-chart")
         .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -104,14 +93,14 @@ function generateLollipopChart(data){
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
-    // sort data and pull top ten
+    // Sort data and pull top ten
     data.sort(function(b, a) {
     return a.frequency - b.frequency;
     })
 
     data = data.slice(0,10);
 
-    // Add X axis
+    // Add x axis
     var x = d3.scaleLinear()
         .domain([0, data[0].frequency])
         .range([ 0, width]);
@@ -122,7 +111,7 @@ function generateLollipopChart(data){
             .attr("transform", "translate(-10,0)rotate(-45)")
             .style("text-anchor", "end");
 
-    // Y axis
+    // Add y axis
     var y = d3.scaleBand()
         .range([ 0, height ])
         .domain(data.map(function(d) { return d.keyword; }))
@@ -130,7 +119,7 @@ function generateLollipopChart(data){
         svg.append("g")
         .call(d3.axisLeft(y))
 
-    // Lines
+    // Add lollipop lines
     svg.selectAll("myline")
         .data(data)
         .enter()
@@ -141,7 +130,7 @@ function generateLollipopChart(data){
             .attr("y2", function(d) { return y(d.keyword); })
             .attr("stroke", "grey")
 
-    // Circles
+    // Add lollipop circles
     svg.selectAll("mycircle")
         .data(data)
         .enter()
@@ -152,7 +141,7 @@ function generateLollipopChart(data){
             .style("fill", "#a3d2a0")
             .attr("stroke", "grey")
     
-    // Change the x coordinates of line and circle
+    // Change the x coordinates of line and circle so that they transition on loading
     svg.selectAll("circle")
         .transition()
         .duration(2000)
@@ -167,6 +156,7 @@ function generateLollipopChart(data){
 
 // This function creates a bubble chart of headline sentiment scores using Plotly
 function generateBubbleChart(input, data) {
+
     // Create trace
     let bubbleTrace = {
         y: data.map(headline => headline.compound_score),
@@ -191,8 +181,9 @@ function generateBubbleChart(input, data) {
 
 // This function generates a bar chart with a breakdown of sentiment category using Plotly
 function generateBarChart(input, data) {
-    // Trace1 for sentiment categories
-    var trace1 = {
+
+    // Trace for sentiment categories
+    var trace = {
         x: data.map(category => category.frequency),
         y: data.map(category => category.category),
         type: "bar",
@@ -200,9 +191,8 @@ function generateBarChart(input, data) {
         marker: {color: ['#104b6d', '#a3d2a0', '#6f2b6e']}
     };
 
-    
-    // Turning trace into array
-    var data = [trace1];
+    // Turn trace into array
+    var data = [trace];
     
     // Set layout
     var layout = {
@@ -259,7 +249,7 @@ d3.json("api/domainscores/all").then((domainscores) => {
     generateBarChart('All', domainscores.category_counts);
 });
 
-// Function which changes data source
+// Function which changes data source for keyword plots
 function changeKeywordData(selected){
      let api_call = 'api/keywords/' + selected;
     d3.json(api_call).then(function(keywords){
@@ -268,7 +258,7 @@ function changeKeywordData(selected){
     });
  };
 
-// Function which changes data source
+// Function which changes data source for domain plots
 function changeData(){
     let selected = d3.select('#domain-names').property('value');
     let api_call = 'api/domainscores/' + selected;
@@ -279,7 +269,7 @@ function changeData(){
     changeKeywordData(selected)
   };
 
-// CThis function clears filter and returns to all data
+// This function clears filter and returns to all data by reloading the page
 function clearFilter(){
     location.reload()
 };
