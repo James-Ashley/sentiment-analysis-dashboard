@@ -5,7 +5,7 @@ function createArc(data) {
         
         // Sort nodes
         data.nodes.sort((a, b) => d3.ascending(a.id , b.id))
-        console.log(data)
+        
         // set the dimensions and margins of the graph
         var margin = {top: 20, right: 30, bottom: 20, left: 30},
         width = 800 - margin.left - margin.right,
@@ -37,7 +37,7 @@ function createArc(data) {
                 .attr("cx", 100)
                 .attr("cy", function(d){ return(y(d.id))})
                 .attr("r", 6)
-                .style("fill", "#69b3a2")
+                .style("fill", "#5ac4f8")
                 .attr("stroke", "white")
     
         // Add node labels
@@ -76,16 +76,16 @@ function createArc(data) {
             .on('mouseover', function (d) {
                 // Highlight the nodes
                 nodes.style('fill', "#B8B8B8")
-                d3.select(this).style('fill', '#69b3b2')
+                d3.select(this).style('fill', "#5ac4f8")
                 // Highlight the connections
                 links
-                    .style('stroke', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? '#69b3b2' : '#b8b8b8';})
+                    .style('stroke', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? '#5ac4f8' : '#b8b8b8';})
                     .style('stroke-width', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? 2 : 1;})
                 labels
                     .style("font-size", function(label_d){ return label_d.id === d.id ? 15 : 10 } )
             })
             .on('mouseout', function (d) {
-                nodes.style('fill', "#69b3a2")
+                nodes.style('fill', "#5ac4f8")
                 links
                     .style('stroke', 'black')
                     .style('stroke-width', '1')

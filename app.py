@@ -105,11 +105,13 @@ def getDomainList():
 def getFilteredKeywords(domain_name):
     # Check if filter was included
     if domain_name == "all":
+
         news_data = mongo.db.NFTA.find({})
+        
     else:
         filter = {"source": domain_name}
 
-        news_data = mongo.db.NFTA.find(filter)
+        news_data = mongo.db.NFTA.find(filter).limit(100)
 
     headlines = []
 
@@ -139,7 +141,9 @@ def getFilteredKeywords(domain_name):
 def getFilteredDomainScores(domain_name):
     # Check if filter was included
     if domain_name == "all":
+
         news_data = mongo.db.NFTA.find({})
+
     else:
         filter = {"source": domain_name}
 
@@ -176,7 +180,7 @@ def getFilteredDomainScores(domain_name):
 def getFilteredBigrams(text_source):
     filter = {"text_source": text_source}
 
-    bigrams_data = mongo.db.bigrams.find(filter)
+    bigrams_data = mongo.db.bigrams.find(filter).limit(100)
 
     bigrams = {}
 
@@ -210,6 +214,7 @@ def getFilteredBigrams(text_source):
 
 @app.route("/api/domainsentiment")
 def getDomainSentiment():
+
     data = mongo.db.NFTA.find({})
 
     news = []
