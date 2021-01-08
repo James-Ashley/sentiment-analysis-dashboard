@@ -10,12 +10,25 @@ This project builds on prior projects ([Sentiment Analysis](https://github.com/J
 Newspapers are notoriously biased which would suggest that the language of news articles is not neutral. News sources are also criticized for always focusing on sensational or negative topics rather than providing more balanced reporting. We were interested in exploring this by analyzing frequent bigrams and the sentiment of news covering a politically charged topic in the US: immigration.
 
 ## Data
+collection/cleaning process
+
+size
+
+date range
+
+sources
 
 ## Methods
 ### Data Analysis
+nltk vader/nltk bigram
 
 ### App Architecture
 ![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/static/images/architecture.jpg "App Architecture")
+
+flask app/api
+    routes (copy/paste from methods.html)
+
+js 
 
 
 ## Results: [View the Website](https://immigrant-headlines-sentiment.herokuapp.com/)
