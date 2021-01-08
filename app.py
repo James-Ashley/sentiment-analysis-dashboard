@@ -24,8 +24,6 @@ stop_words = stopwords.words("english")
 # This function tokenizes text (removes punctuation and stop words)
 # Input = list of strings
 # Output = list of tokens
-
-
 def process_corpus(titles):
     tokens = []
     for title in titles:
@@ -55,9 +53,10 @@ mongo = PyMongo(app)
 # Format of db in MONGODB:
 # Database: ETL
 # Collection: NFTA
-# Keys:
-# ['keyword', 'source', 'author', 'title', 'url', 'published',
-# 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
+#   Keys: ['keyword', 'source', 'author', 'title', 'url', 'published',
+#   'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
+# Collection: bigrams
+#   Keys: ['nodes', 'links', 'text_source']
 
 # Routes that return webpages
 @app.route("/")
@@ -117,6 +116,7 @@ def getFilteredKeywords(domain_name):
 
         news_data = mongo.db.NFTA.find(filter).limit(100)
 
+    # Extract data
     headlines = []
 
     for article in news_data:
@@ -153,6 +153,7 @@ def getFilteredDomainScores(domain_name):
 
         news_data = mongo.db.NFTA.find(filter)
 
+    # Extract data
     domains = []
 
     for article in news_data:
@@ -166,7 +167,8 @@ def getFilteredDomainScores(domain_name):
         domains.append(item)
 
     df = pd.DataFrame(domains)
-
+    
+    # Determine number of occurrences of each sentiment category
     count = dict(df["sentiment_category"].value_counts())
 
     count_list = []
@@ -182,10 +184,12 @@ def getFilteredDomainScores(domain_name):
 
 @app.route("/api/bigrams/<text_source>", methods=["GET"])
 def getFilteredBigrams(text_source):
+    # Create filter
     filter = {"text_source": text_source}
 
-    bigrams_data = mongo.db.bigrams.find(filter).limit(100)
+    bigrams_data = mongo.db.bigrams.find(filter)
 
+    #Extract data
     bigrams = {}
 
     for obj in bigrams_data:
@@ -198,6 +202,7 @@ def getFilteredBigrams(text_source):
 def getDataTable():
     data = mongo.db.NFTA.find({})
 
+    # Extract data
     news = {"data": []}
 
     for article in data:
@@ -221,6 +226,7 @@ def getDomainSentiment():
 
     data = mongo.db.NFTA.find({})
 
+    #Extract data
     news = []
 
     for article in data:
@@ -230,6 +236,7 @@ def getDomainSentiment():
         }
         news.append(item)
 
+    # For each domain, determine the number of occurences of each sentiment category
     df = pd.DataFrame(news)
 
     df2 = df.groupby(["domain", "sentiment_category"])["domain"].size().to_dict()
