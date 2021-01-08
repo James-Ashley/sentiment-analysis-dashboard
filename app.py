@@ -146,14 +146,16 @@ def getFilteredDomainScores(domain_name):
     # Check if filter was included
     if domain_name == "all":
 
-        news_data = mongo.db.NFTA.find({})
+        news_data = mongo.db.NFTA.find({}).limit(100)
+        sent_data = mongo.db.sentiment_counts.find({'aggregation': 'all'})
 
     else:
         filter = {"source": domain_name}
 
-        news_data = mongo.db.NFTA.find(filter)
+        news_data = mongo.db.NFTA.find(filter).limit(100)
+        sent_data = mongo.db.sentiment_counts.find(filter)
 
-    # Extract data
+    # Extract data pt.1
     domains = []
 
     for article in news_data:
@@ -166,18 +168,17 @@ def getFilteredDomainScores(domain_name):
         }
         domains.append(item)
 
-    df = pd.DataFrame(domains)
-    
-    # Determine number of occurrences of each sentiment category
-    count = dict(df["sentiment_category"].value_counts())
+    #Extract data pt.2
+    sent_counts = []
 
-    count_list = []
+    for article in sent_data:
+        item = {
+            "sentiment": article["sentiment_category"],
+            "count": article["count"]
+        }
+        sent_counts.append(item)
 
-    for key, value in count.items():
-        x = {"category": key, "frequency": int(value)}
-        count_list.append(x)
-
-    domain_scores = {"article_data": domains, "category_counts": count_list}
+    domain_scores = {"article_data": domains, "category_counts": sent_counts}
 
     return jsonify(domain_scores)
 
@@ -224,7 +225,7 @@ def getDataTable():
 @app.route("/api/domainsentiment")
 def getDomainSentiment():
 
-    data = mongo.db.sentiment_counts.find({})
+    data = mongo.db.sentiment_counts.find({'aggregation':'domain'})
 
     #Extract data
     sent_counts = []
