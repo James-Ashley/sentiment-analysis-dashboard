@@ -1,12 +1,3 @@
-//Initial check - REMOVE BEFORE DEPLOYING
-console.log('this webpage is rendering')
-
-//TODO: 
-
-// BUBBLE CHART
-// Tweak hover text
-
-
 // Functions
 
 // This function generates a word cloud with word size proportional to word frequency using D3-cloud. 
