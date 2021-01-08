@@ -112,7 +112,7 @@ def getFilteredKeywords(domain_name):
     else:
         filter = {"source": domain_name}
 
-        news_data = mongo.db.NFTA.find(filter).limit(100)
+        news_data = mongo.db.NFTA.find(filter)
 
     # Extract data
     headlines = []
