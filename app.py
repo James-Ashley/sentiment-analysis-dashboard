@@ -87,7 +87,6 @@ def keywords():
 
 @app.route("/methods")
 def methods():
-    # x = news_table.datatable()
 
     return render_template("methods.html")
 
@@ -107,7 +106,7 @@ def getFilteredKeywords(domain_name):
     if domain_name == "all":
 
         news_data = mongo.db.NFTA.find({})
-        
+
     else:
         filter = {"source": domain_name}
 
