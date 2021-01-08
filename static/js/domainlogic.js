@@ -24,6 +24,9 @@ console.log('this webpage is rendering')
 // Required format of data: [{keyword: 'word', frequency: int}, {keyword: 'word', frequency: int}]
 function generateWordCloud(wordArray) {
 
+    // Pull top 25 words
+    wordArray = wordArray.sort((a, b) => d3.descending(a.frequency, b.frequency)).slice(0,30)
+
     // Remove chart already present
     word_cloud = d3.select("#word-cloud");
     word_cloud.select("svg").remove();
@@ -33,6 +36,17 @@ function generateWordCloud(wordArray) {
     width = 450 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
+    // Set continuous scale for fontsize
+    var fontScale = d3.scaleLinear()
+    .domain([d3.min(wordArray.map(function(d) {return d.frequency})), d3.max(wordArray.map(function(d) {return d.frequency}))])
+    .range([20,70])
+
+    // Set colors
+    var colors = ['#104b6d', '#a3d2a0', '#6f2b6e', '#5ac4f8']
+    var colorScale = d3.scaleQuantile()
+        .domain([d3.min(wordArray.map(function(d) {return d.frequency})), d3.max(wordArray.map(function(d) {return d.frequency}))])
+        .range(colors);
+
     // append the svg object to the body of the page
     var svg = d3.select("#word-cloud").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -41,13 +55,13 @@ function generateWordCloud(wordArray) {
         .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-    // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
+    // Constructs a new cloud layout instance. It runs an algorithm to find the position of words that suits your requirements
     var layout = d3.layout.cloud()
         .size([width, height])
-        .words(wordArray.map(function(d) { return {text: d.keyword, size:d.frequency}; }))
+        .words(wordArray.map(function(d) { return {text: d.keyword, size:d.frequency, color:colorScale(d.frequency)}; }))
         .padding(10)
         .rotate(0)
-        .fontSize(function(d) { return d.size * .5; })
+        .fontSize(function(d) { return fontScale(d.size); })
         .on("end", draw);
         layout.start();
 
@@ -61,7 +75,7 @@ function generateWordCloud(wordArray) {
             .data(words)
         .enter().append("text")
             .style("font-size", function(d) { return `${d.size}px`; })
-            .style("fill", "#9f0438")
+            .style("fill", function(d) { return d.color })
             .attr("text-anchor", "middle")
             .attr("transform", function(d) {
             return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
