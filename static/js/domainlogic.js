@@ -135,7 +135,7 @@ function generateLollipopChart(data){
         .data(data)
         .enter()
         .append("line")
-            .attr("x1", function(d) { return x(d.frequency); })
+            .attr("x1", x(0))
             .attr("x2", x(0))
             .attr("y1", function(d) { return y(d.keyword); })
             .attr("y2", function(d) { return y(d.keyword); })
@@ -146,11 +146,23 @@ function generateLollipopChart(data){
         .data(data)
         .enter()
         .append("circle")
-            .attr("cx", function(d) { return x(d.frequency); })
+            .attr("cx", x(0))
             .attr("cy", function(d) { return y(d.keyword); })
             .attr("r", "7")
-            .style("fill", "#69b3a2")
-            .attr("stroke", "black")
+            .style("fill", "#a3d2a0")
+            .attr("stroke", "grey")
+    
+    // Change the x coordinates of line and circle
+    svg.selectAll("circle")
+        .transition()
+        .duration(2000)
+        .attr("cx", function(d) { return x(d.frequency); })
+
+    svg.selectAll("line")
+        .transition()
+        .duration(2000)
+        .attr("x1", function(d) { return x(d.frequency); })
+
 };
 
 // This function creates a bubble chart of headline sentiment scores using Plotly
@@ -240,11 +252,11 @@ d3.json("/api/keywords/all").then((keywords) => {
     generateLollipopChart(keywords);
 });
 
-// Import the domain scores data and generate the bubble chart and bar chart 
-d3.json("api/domainscores/all").then((domainscores) => {
-    generateBubbleChart('All', domainscores.article_data);
-    generateBarChart('All', domainscores.category_counts);
-});
+// // Import the domain scores data and generate the bubble chart and bar chart 
+// d3.json("api/domainscores/all").then((domainscores) => {
+//     generateBubbleChart('All', domainscores.article_data);
+//     generateBarChart('All', domainscores.category_counts);
+// });
 
 // Function which changes data source
 function changeKeywordData(selected){
