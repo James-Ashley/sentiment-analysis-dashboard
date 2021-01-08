@@ -146,13 +146,13 @@ def getFilteredDomainScores(domain_name):
     # Check if filter was included
     if domain_name == "all":
 
-        news_data = mongo.db.NFTA.find({}).limit(100)
+        news_data = mongo.db.NFTA.find({})
         sent_data = mongo.db.sentiment_counts.find({'aggregation': 'all'})
 
     else:
         filter = {"source": domain_name}
 
-        news_data = mongo.db.NFTA.find(filter).limit(100)
+        news_data = mongo.db.NFTA.find(filter)
         sent_data = mongo.db.sentiment_counts.find(filter)
 
     # Extract data pt.1
