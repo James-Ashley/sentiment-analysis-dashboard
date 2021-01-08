@@ -175,7 +175,7 @@ function generateBubbleChart(input, data) {
         marker: {
             color: data.map(headline => (Math.abs(headline.compound_score) + 1) *10),
             size: data.map(headline => (Math.abs(headline.compound_score) + 1) *10), 
-            colorscale: 'Earth'
+            colorscale: [['0.0', '#104b6d'], ['0.3333', '#a3d2a0'], ['0.6666','#6f2b6e'], ['1','#5ac4f8']]
         }
     };
     // Create layout
@@ -196,7 +196,8 @@ function generateBarChart(input, data) {
         x: data.map(category => category.frequency),
         y: data.map(category => category.category),
         type: "bar",
-        orientation: "h"
+        orientation: "h",
+        marker: {color: ['#104b6d', '#a3d2a0', '#6f2b6e']}
     };
 
     
@@ -212,7 +213,7 @@ function generateBarChart(input, data) {
     Plotly.newPlot("bar-chart", data, layout);
 }
 
-//adding in zoom capability to the bubble chart
+//This function adds zoom capability to the bubble chart
 function zoom() {
     var min = 0.45 * Math.random();
     var max = 0.55 + 0.45 * Math.random();
@@ -246,17 +247,17 @@ d3.json("api/domainlist").then((domains) => {
     });
 });
 
-// Import the keywords data and generate the lollipop chart and word cloud 
-d3.json("/api/keywords/all").then((keywords) => {
-    generateWordCloud(keywords);
-    generateLollipopChart(keywords);
-});
-
-// // Import the domain scores data and generate the bubble chart and bar chart 
-// d3.json("api/domainscores/all").then((domainscores) => {
-//     generateBubbleChart('All', domainscores.article_data);
-//     generateBarChart('All', domainscores.category_counts);
+// // Import the keywords data and generate the lollipop chart and word cloud 
+// d3.json("/api/keywords/all").then((keywords) => {
+//     generateWordCloud(keywords);
+//     generateLollipopChart(keywords);
 // });
+
+// Import the domain scores data and generate the bubble chart and bar chart 
+d3.json("api/domainscores/all").then((domainscores) => {
+    generateBubbleChart('All', domainscores.article_data);
+    generateBarChart('All', domainscores.category_counts);
+});
 
 // Function which changes data source
 function changeKeywordData(selected){

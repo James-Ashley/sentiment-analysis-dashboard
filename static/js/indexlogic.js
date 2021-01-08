@@ -5,26 +5,29 @@ function generateStackedChart(data) {
   let neg_data = data.filter(object => object.sentiment === 'negative')
   let pos_data = data.filter(object => object.sentiment === 'positive')
   let neu_data = data.filter(object => object.sentiment === 'neutral')
-  console.log(neu_data)
+
   var neg = {
       x: neg_data.map(domain => domain.source),
       y: neg_data.map(domain => domain.count),
       name: 'Negative',
       type: 'bar',
+      marker: {color: '#104b6d'}
   };
     
   var neu = {
     x: neu_data.map(domain => domain.source),
     y: neu_data.map(domain => domain.count),
     name: 'Neutral',
-    type: 'bar'
+    type: 'bar',
+    marker: {color: '#a3d2a0'}
   };
   
   var pos = {
     x: pos_data.map(domain => domain.source),
     y: pos_data.map(domain => domain.count),
     name: 'Positive',
-    type: 'bar'
+    type: 'bar',
+    marker: {color: '#6f2b6e'}
   };
       
   var data = [neg, neu, pos];
