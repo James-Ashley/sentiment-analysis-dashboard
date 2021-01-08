@@ -51,10 +51,12 @@ mongo = PyMongo(app)
 # Format of db in MONGODB:
 # Database: ETL
 # Collection: NFTA
-#   Keys: ['keyword', 'source', 'author', 'title', 'url', 'published',
+#   Fields: ['keyword', 'source', 'author', 'title', 'url', 'published',
 #   'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
 # Collection: bigrams
-#   Keys: ['nodes', 'links', 'text_source']
+#   Fields: ['nodes', 'links', 'text_source']
+# Collection: sentiment_counts
+#   Fields: ['source', 'sentiment_category', 'count']
 
 # Routes that return webpages
 @app.route("/")
@@ -222,30 +224,20 @@ def getDataTable():
 @app.route("/api/domainsentiment")
 def getDomainSentiment():
 
-    data = mongo.db.NFTA.find({})
+    data = mongo.db.sentiment_counts.find({})
 
     #Extract data
-    news = []
+    sent_counts = []
 
     for article in data:
         item = {
-            "sentiment_category": article["sentiment_category"],
-            "domain": article["source"],
+            "sentiment": article["sentiment_category"],
+            "source": article["source"],
+            "count": article["count"]
         }
-        news.append(item)
+        sent_counts.append(item)
 
-    # For each domain, determine the number of occurences of each sentiment category
-    df = pd.DataFrame(news)
-
-    df2 = df.groupby(["domain", "sentiment_category"])["domain"].size().to_dict()
-
-    stacked_bar = []
-
-    for key, value in df2.items():
-        x = {"source": key[0], "sentiment": key[1], "count": value}
-        stacked_bar.append(x)
-
-    return jsonify(stacked_bar)
+    return jsonify(sent_counts)
 
 
 if __name__ == "__main__":
