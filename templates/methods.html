@@ -18,37 +18,90 @@
 <div id="nav-placeholder">
 
 </div>
-
-
 <!--end of Navigation bar-->
 
 <body>
-
+  <div class="container">
   <div class="row justify-content-evenly">
     <div class="col-md-12 text-center">
       <h2>Methodology</h2>
     </div>
     <div class="col-md-12">
-      <div id="explanations">
-        <h6>Sentiment Analysis</h6>
-        <ul>
-          <p>Sentiment analysis classifies a text's general sentiment or "feeling" into positive, negative or neutral.</p>
-        </ul>
-        <h6>Bigrams</h6>
-        <ul>
-          <p>A bigram is a pair of words that occur adjacent to each other within a text. In this analysis, only bigrams that contain two content words (words that convey meaning rather than grammatical function) are included.</p>
-        </ul>
-      </div>
       <div id="data">
-
+        <h4>Data Collection and Analysis</h4>
+        <div class="row m-3">
+          <div class="col-md-9">
+            <img class="img-fluid" src="../static/images/data.jpg"/> 
+            <h6>Data Collection</h6>
+            <ul>
+              <li>We started by collecting metadata on articles discussing immigration using NewsAPI. We then webscraped the full text of these articles with Newspaper3k.</li>
+            </ul>
+            <h6>Data Analysis</h6>
+            <ul>
+              <li>
+                <p>Two corpora were created: headlines and complete text. We determined the most frequent bigrams using NLTK and then filtered these using a custom function. NLTK Vader was used to classify the sentiment of the article headlines but not of the full text since Vader was trained on social media text.</p>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div id="libraries">
+                  <h6 class="card-title">Libraries Used</h6>
+                  <ul>
+                    <li>Python
+                      <ul>
+                        <li>Flask</li>
+                        <li>NLTK</li>
+                        <li>pandas</li>
+                        <li>PyMongo</li>
+                        <li>re</li>
+                        <li>spaCy</li>
+                      </ul>
+                    </li>
+                    <li>JavaScript
+                      <ul>
+                        <li>Plotly.js</li>
+                        <li>D3.js</li>
+                        <li>D3-cloud.js</li>
+                      </ul>
+                  </ul>
+          
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="architecture">
-
-      </div>
-      <div id="libraries">
-
+        <h4>App Architecture</h4>
+        <div class="row m-3">
+          <div class="col-md-9">
+            <img class="img-fluid" src="../static/images/architecture.jpg"/>
+            <h6>Flask API</h6>
+            <ul>
+              <li>
+                A total of 5 flask api routes were created.
+                <ol>
+                  <li>News Sources: This route returns a list of all news sources in the database.</li>
+                  <li>Sentiment Scores: This route returns the raw data and can be filtered by news source.</li>
+                  <li>Sentiment Counts: This route determines and returns the total number of occurrences of each sentiment category. This route can be filtered by news source.</li>
+                  <li>Keywords: This route pulls the headlines from the database and then determines and returns the top 50 most frequent words. This route can be filtered by news source.</li>
+                  <li>Bigrams: This route returns the headline or full text bigrams.</li>
+                </ol>
+              </li>
+            </ul>
+            <h6>JavaScript</h6>
+            <ul>
+              <li>The api calls were performed in Javascript in order to access the data for the visualizations.</li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+          </div>
+        </div>
       </div>
     </div>    
+  </div>
   </div>
 
 
