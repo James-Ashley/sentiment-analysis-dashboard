@@ -91,6 +91,11 @@ def methods():
     return render_template("methods.html")
 
 
+@app.route("/datatable")
+def datatable():
+    return render_template("datatable.html")
+
+
 # Routes that return data from MongoDB
 @app.route("/api/domainlist")
 def getDomainList():
