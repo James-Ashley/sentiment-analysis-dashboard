@@ -247,11 +247,11 @@ d3.json("api/domainlist").then((domains) => {
     });
 });
 
-// // Import the keywords data and generate the lollipop chart and word cloud 
-// d3.json("/api/keywords/all").then((keywords) => {
-//     generateWordCloud(keywords);
-//     generateLollipopChart(keywords);
-// });
+// Import the keywords data and generate the lollipop chart and word cloud 
+d3.json("/api/keywords/all").then((keywords) => {
+    generateWordCloud(keywords);
+    generateLollipopChart(keywords);
+});
 
 // Import the domain scores data and generate the bubble chart and bar chart 
 d3.json("api/domainscores/all").then((domainscores) => {
