@@ -194,26 +194,26 @@ def getFilteredBigrams(text_source):
     return jsonify(bigrams)
 
 
-# @app.route("/api/datatable")
-# def getDataTable():
-#     data = mongo.db.NFTA.find({})
+@app.route("/api/datatable")
+def getDataTable():
+    data = mongo.db.NFTA.find({})
 
-#     news = {"data": []}
+    news = {"data": []}
 
-#     for article in data:
-#         item = {
-#             "Keyword": article["keyword"],
-#             "Source": article["source"],
-#             "Author": article["author"],
-#             "Title": article["title"],
-#             "URL": article["url"],
-#             "Published": article["published"],
-#             "Compound Score": article["compound_score"],
-#             "Sentiment Category": article["sentiment_category"],
-#         }
-#         news["data"].append(item)
+    for article in data:
+        item = {
+            "Keyword": article["keyword"],
+            "Source": article["source"],
+            "Author": article["author"],
+            "Title": article["title"],
+            "URL": article["url"],
+            "Published": article["published"],
+            "Compound Score": article["compound_score"],
+            "Sentiment Category": article["sentiment_category"],
+        }
+        news["data"].append(item)
 
-#     return jsonify(news)
+    return jsonify(news)
 
 
 @app.route("/api/domainsentiment")
