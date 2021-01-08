@@ -37,7 +37,7 @@ function generateStackedChart(data) {
   var data = [neg, neu, pos];
   
   // Customize layout
-  var layout = {barmode: 'stack', bargroupgap: 0.1, xaxis: {zeroline: false}};
+  var layout = {title: {text: 'Headline Sentiment'}, barmode: 'stack', bargroupgap: 0.1, xaxis: {tickangle: 35, tickfont: {size: 10}, zeroline: false}};
   
   // Plot chart
   Plotly.newPlot('stacked-chart', data, layout);

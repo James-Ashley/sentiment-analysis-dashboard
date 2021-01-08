@@ -26,7 +26,23 @@
   <div class='container'>
     <div class="row justify-content-evenly">
       <div class="col-md-12">
-        <div id="stacked-chart"></div>
+        <h4>Newspaper Headlines on Immigration</h4>
+        <div class="row">
+          <div class="col-md-12">
+            <p>This analysis examines characteristics of newspaper headlines related to the topic of immigration and immigrants. We were particularly interested in the sentiment of different news source headlines and the interconnectivity of frequent words.</p>
+            <h6>What is sentiment?</h6>
+            <p>Sentiment is the emotional strength of a text. In this analysis, sentiment is classified into three categories: positive, negative, and neutral.</p>
+            <!--If we want to do randomly generate an example headline, db.collection.aggregate([{ $sample: { size: 1 }}]) will do this for us if we want it -->
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col-md-2'></div>
+          <div class="col-md-8">
+            <div id="stacked-chart"></div>
+          </div>
+          <div class="col-md-2"></div>
+        </div>
+        </div>
       </div>    
     </div>    
   </div>
