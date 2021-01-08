@@ -16,6 +16,8 @@ Newspapers are notoriously biased which would suggest that the language of news 
 
 ### App Architecture
 ![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/static/images/architecture.jpg "App Architecture")
+
+
 ## Results: [View the Website](https://immigrant-headlines-sentiment.herokuapp.com/)
 
 ## Limitations
@@ -27,6 +29,8 @@ In addition, as can be seen in the keyword and bigram analyses, the news cycle i
 Chaithra, V. D. (2019). Hybrid approach: naive bayes and sentiment VADER for analyzing sentiment of mobile unboxing video comments. *International Journal of Electrical and Computer Engineering (IJECE), 9*(5), 4452-4459.
 
 Gilbert, C. H. E., & Hutto, E. (2014, June). Vader: A parsimonious rule-based model for sentiment analysis of social media text. In *Eighth International Conference on Weblogs and Social Media (ICWSM-14)*. Available at (20/04/16) http://comp.social.gatech.edu/papers/icwsm14.vader.hutto.pdf (Vol. 81, p. 82).
+
+Gramazio, Connor C. and Laidlaw, David H. and Schloss, Karen B. (2017). Colorgorical: creating discriminable and preferable color palettes for information visualization. *IEEE Transactions on Visualization and Computer Graphics*.
 
 Martin, B. & Koufos, N. (2020). Sentiment analysis on Reddit news headlines with Python’s Natural Language Toolkit (NLTK). *Learn Data Science.* https://www.learndatasci.com/tutorials/sentiment-analysis-reddit-headlines-pythons-nltk/.
 
