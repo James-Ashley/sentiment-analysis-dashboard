@@ -5,7 +5,7 @@ Version 1.0.0
 The purpose of this project was to display data on newspaper headlines related to immigration on an interactive website.
 
 ## Background
-This project builds on prior projects ([Sentiment Analysis](https://github.com/James-Ashley/sentiment_analysis), [Article Web Scraping]()) and examines the sentiment of newspaper headlines and bigrams of both newspaper headlines and full length articles. 
+This project builds on prior projects ([Sentiment Analysis](https://github.com/James-Ashley/sentiment_analysis), [Article Web Scraping](https://github.com/James-Ashley/News_Full_Text_Articles)) and examines the sentiment of newspaper headlines and bigrams of both newspaper headlines and full length articles. 
 
 Newspapers are notoriously biased which would suggest that the language of news articles is not neutral. News sources are also criticized for always focusing on sensational or negative topics rather than providing more balanced reporting. We were interested in exploring this by analyzing frequent bigrams and the sentiment of news covering a politically charged topic in the US: immigration.
 
@@ -15,11 +15,11 @@ Newspapers are notoriously biased which would suggest that the language of news 
 ### Data Analysis
 
 ### App Architecture
-
+![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/static/images/architecture.jpg "App Architecture")
 ## Results: [View the Website](https://immigrant-headlines-sentiment.herokuapp.com/)
 
 ## Limitations
-Although NLTK Vader performs well on different types of text (Gilbert & Hutto, 2014), it was initially designed to evaluate the sentiment of social media, and we only loosely verified its accuracy in our sentiment analysis. Future research should include creating a training dataset of news headlines related to immigration to train a new sentiment classifier and/or improve Vader's performance.
+Although NLTK Vader performs well on different text types (Gilbert & Hutto, 2014), it was initially designed to evaluate the sentiment of social media, and we only loosely verified its accuracy in our sentiment analysis. Future research should include creating a training dataset of news headlines related to immigration to train a new sentiment classifier and/or improve Vader's performance.
 
 In addition, as can be seen in the keyword and bigram analyses, the news cycle is heavily influenced by current events, and we could only access the last few months of news. Continuing to collect news articles over time will allow us to better evaluate which words are related to immigration vs. words that are frequently occuring due to specific events.
 
