@@ -241,8 +241,10 @@ d3.json("api/domainscores/all").then((domainscores) => {
 });
 
 // Function which changes data source for keyword plots
-function changeKeywordData(selected){
-     let api_call = 'api/keywords/' + selected;
+function changeKeywordData(selected_domains){
+    // Pass in another variable (selected_sentiments)
+    // Use both variables to create api call
+     let api_call = 'api/keywords/' + selected_domains;
     d3.json(api_call).then(function(keywords){
         generateWordCloud(keywords);
         generateLollipopChart(keywords);
@@ -278,6 +280,10 @@ var dropdown = d3.select('#domain-names')
 
 // Select the clear filter button
 var clearFilterButton = d3.select('#refresh-btn');
+
+// Add a button to the html (options: ---- (all), positive, neutral, negative)
+// Select the button
+// Create an event which listens for change in button(s)
 
 // Create event handler which listens for change in dropdown menu
 dropdown.on('change', changeData);
