@@ -1,5 +1,9 @@
 // This function creates an arc diagram
-function createArc(data) {
+function createArc(data, text_type) {
+        // Update title
+        let title = d3.select("#arc-title")
+        title.text("")
+        title.text(`Connected Bigrams in the ${text_type}`)
 
         // Remove chart already present
         d3.select("svg").remove();
@@ -96,9 +100,10 @@ function createArc(data) {
 
 }
 
-// Initialize arc diagram
+// Initialize arc diagram 
 d3.json('api/bigrams/headlines').then( function(data) {
-    createArc(data);
+    let text_type = 'Headlines'
+    createArc(data, text_type);
     })
 
 // Select dropdown menu
@@ -106,10 +111,16 @@ var nodeOrder = d3.select('#text-type');
 
 // Function which changes data source
 function changeData(){
+    // Select dropdown item that was selected
     let selected = d3.select('#text-type').property('value');
+
+    // Modify dropdown item value for arc diagram title
+    let text_type = selected.toUpperCase().replace('_', ' ');
+
+    // Call updated data
     let api_call = 'api/bigrams/' + selected;
     d3.json(api_call).then(function(data){
-        createArc(data);
+        createArc(data, text_type);
     });
 };
 

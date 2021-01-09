@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name='viewport' content='width=device-width, initial-scale=1.0' \>
   <title>Domains</title>
-  <!-- Bootstrap CDN -->
+  <!-- Bootstrap CDN --> 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
   integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <!-- Bootswatch Style Sheet-->
@@ -45,30 +45,69 @@
       <div class="col-md-12">
         <h3 id="news-source"></h3>
         <hr>
-        <br>
         <h4>Sentiment Categories</h4>
+        <div class="row">
+          <div class='col-md-4'></div>
+          <div class='col-md-4'>
+            <div id='loading-domains'>
+              <button class="btn btn-primary">
+                <span class="spinner-border spinner-border-sm"></span>
+               Sentiment Data Loading...
+              </button>
+            </div>
+          </div>
+          <div class='col-md-4'></div>
+        </div>
       </div>
-      <div class="col-md-4">
-        <div id="bar-chart"></div>
       </div>
-      <div class="col-md-8">
-        <div id="bubble-chart"></div>
+      <div class='row'>
+        <div class="col-md-4">
+          <div id="bar-chart"></div>
+        </div>
+        <div class="col-md-8">
+          <div id="bubble-chart"></div>
+        </div>
       </div>
       <hr>
-    </div>
     <div class="row m-5">
       <div class="col-md-12  text-center">
         <h4>Most Frequent Keywords</h4>
-        <!-- Add dropdown menu here which filters by sentiment -->
+        <div class="row h-100">
+          <div class='col-md-6 text-right my-auto'>
+            <div class='m-3'>
+              <h5>Sentiment Category:</h5>
+            </div>
+          </div>
+          <div class='col-md-6 text-left my-auto'>
+            <div class='m-3'>
+              <button id="all" type="button" class="btn btn-dark p-2 sent-btn">All</button>
+              <button id="negative" type="button" class="btn btn-dark p-2 sent-btn">Negative</button>
+              <button id="neutral" type="button" class="btn btn-dark p-2 sent-btn">Neutral</button>
+              <button id="positive" type="button" class="btn btn-dark p-2 sent-btn">Positive</button>
+            </div>             
+          </div>
+      </div>
       </div>
     </div>
-    <div class="row justify-content-evenly">
+    <div class="row">
       <div class="col-md-6">
         <div id="word-cloud"></div>
       </div>
       <div class="col-md-6">
         <div id="lollipop-chart"></div>
       </div>     
+    </div>
+    <div class="row">
+      <div class='col-md-4'></div>
+      <div class='col-md-4 text-center'>
+        <div id='loading-keywords'>
+          <button class="btn btn-primary">
+            <span class="spinner-border spinner-border-sm"></span>
+           Keyword Data Loading...
+          </button>
+        </div>
+      </div>
+      <div class='col-md-4'></div>
     </div>
   </div>
 
