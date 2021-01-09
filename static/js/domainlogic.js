@@ -230,6 +230,7 @@ d3.json("api/domainlist").then((domains) => {
 
 // Import the keywords data and generate the lollipop chart and word cloud 
 d3.json("/api/keywords/all/all").then((keywords) => {
+    d3.select("#loading-keywords").property('class', 'd-none');
     generateWordCloud(keywords);
     generateLollipopChart(keywords);
 });
