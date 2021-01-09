@@ -142,7 +142,7 @@ def getFilteredKeywords(domain_name, sent_cat):
     keywords_final = []
     for item in keywords_initial:
         keyword = {}
-        if item[0] not in ["u", "19", "4"]:
+        if item[0] not in ["u", "19", "4", "11", "5"]:
             keyword = {"keyword": item[0], "frequency": item[1]}
             keywords_final.append(keyword)
 
