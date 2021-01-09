@@ -240,6 +240,21 @@ def getDomainSentiment():
 
     return jsonify(sent_counts)
 
+@app.route("/api/randomheadline")
+def getRandomHeadline():
+    data = mongo.db.NFTA.aggregate([{ "$sample": { "size": 1 }}])
+
+    headline_info = []
+
+    for article in data:
+        headline = {
+            'title': article['title'],
+            'sentiment': article['sentiment_category'],
+            'source': article['source']
+        }
+        headline_info.append(headline)
+
+    return jsonify(headline_info)
 
 if __name__ == "__main__":
     app.run(debug=True)
