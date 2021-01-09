@@ -251,7 +251,7 @@ function changeKeywordData(selected_domains){
     });
  };
 
-// Function which changes data source for domain plots
+// Function which changes data source for domain plots 
 function changeData(){
     // Clear header
     header.html('')
