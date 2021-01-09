@@ -5,7 +5,7 @@ Version 1.0.0
 The purpose of this project was to display data on newspaper headlines related to immigration on an interactive website.
 
 ## Background
-This project builds on prior projects ([Sentiment Analysis](https://github.com/James-Ashley/sentiment_analysis), [Article Web Scraping](https://github.com/James-Ashley/News_Full_Text_Articles)) and examines the sentiment of newspaper headlines and bigrams of both newspaper headlines and full length articles. 
+This project builds on our prior projects ([Sentiment Analysis](https://github.com/James-Ashley/sentiment_analysis), [Article Web Scraping](https://github.com/James-Ashley/News_Full_Text_Articles)) and examines the sentiment of newspaper headlines and bigrams of both newspaper headlines and full length articles. 
 
 Newspapers are notoriously biased which would suggest that the language of news articles is not neutral. News sources are also criticized for always focusing on sensational or negative topics rather than providing more balanced reporting. We were interested in exploring this by analyzing frequent bigrams and the sentiment of news covering a politically charged topic in the US: immigration.
 
