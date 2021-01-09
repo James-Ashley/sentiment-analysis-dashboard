@@ -229,7 +229,7 @@ d3.json("api/domainlist").then((domains) => {
 });
 
 // Import the keywords data and generate the lollipop chart and word cloud 
-d3.json("/api/keywords/all").then((keywords) => {
+d3.json("/api/keywords/all/all").then((keywords) => {
     generateWordCloud(keywords);
     generateLollipopChart(keywords);
 });
@@ -244,7 +244,7 @@ d3.json("api/domainscores/all").then((domainscores) => {
 function changeKeywordData(selected_domains){
     // Pass in another variable (selected_sentiments)
     // Use both variables to create api call
-     let api_call = 'api/keywords/' + selected_domains;
+     let api_call = 'api/keywords/' + selected_domains + '/all';
     d3.json(api_call).then(function(keywords){
         generateWordCloud(keywords);
         generateLollipopChart(keywords);
@@ -275,18 +275,32 @@ function clearFilter(){
     location.reload()
 };
 
+// This function updates the keyword data based on the button clicked
+function filterKeywords() {
+    let sel_domain = d3.select('#domain-names').property('value');
+    let sent_filter = this.id;
+    let api_call = 'api/keywords/' + sel_domain + '/' + sent_filter;
+
+    d3.json(api_call).then(function(keywords){
+        generateWordCloud(keywords);
+        generateLollipopChart(keywords);
+    });
+};
+
 // Select dropdown menu
-var dropdown = d3.select('#domain-names')
+var dropdown = d3.select('#domain-names');
 
 // Select the clear filter button
 var clearFilterButton = d3.select('#refresh-btn');
 
 // Add a button to the html (options: ---- (all), positive, neutral, negative)
-// Select the button
-// Create an event which listens for change in button(s)
+var sentFilterButtons = d3.selectAll('.sent-btn')
 
 // Create event handler which listens for change in dropdown menu
 dropdown.on('change', changeData);
 
 // Create event handler which listens for click on clear filter button
 clearFilterButton.on('click', clearFilter);
+
+// Create event handler which listens for click on sentiment filter buttons
+sentFilterButtons.on('click', filterKeywords);

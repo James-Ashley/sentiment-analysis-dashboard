@@ -107,12 +107,14 @@ def getDomainList():
 
 @app.route("/api/keywords/<domain_name>/<sent_cat>", methods=["GET"])
 def getFilteredKeywords(domain_name, sent_cat):
+
     # Check if filter was included
     if domain_name == "all":
         if sent_cat == "all":
             news_data = mongo.db.NFTA.find({})
         else:
             filter = {"sentiment_category": sent_cat}
+            news_data = mongo.db.NFTA.find(filter)
 
     else:
         if sent_cat == "all":
