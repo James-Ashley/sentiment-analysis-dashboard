@@ -228,15 +228,20 @@ d3.json("api/domainlist").then((domains) => {
     });
 });
 
+var keyword_loading = d3.select("#loading-keywords")
+var domain_loading = d3.select("#loading-domains")
+
+
 // Import the keywords data and generate the lollipop chart and word cloud 
 d3.json("/api/keywords/all/all").then((keywords) => {
-    d3.select("#loading-keywords").property('class', 'd-none');
+    keyword_loading.classed("d-none", true);
     generateWordCloud(keywords);
     generateLollipopChart(keywords);
 });
 
 // Import the domain scores data and generate the bubble chart and bar chart 
 d3.json("api/domainscores/all").then((domainscores) => {
+    domain_loading.classed("d-none", true)
     generateBubbleChart(domainscores.article_data);
     generateBarChart(domainscores.category_counts);
 });
