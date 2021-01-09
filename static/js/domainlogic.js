@@ -131,6 +131,8 @@ function generateLollipopChart(data){
             .attr("r", "7")
             .style("fill", "#a3d2a0")
             .attr("stroke", "grey")
+            .append("svg:title")
+                .text(function(d) { return d.frequency; })
 
 };
 
@@ -228,20 +230,25 @@ d3.json("api/domainlist").then((domains) => {
     });
 });
 
+// Select the loading buttons
 var keyword_loading = d3.select("#loading-keywords")
 var domain_loading = d3.select("#loading-domains")
 
 
 // Import the keywords data and generate the lollipop chart and word cloud 
 d3.json("/api/keywords/all/all").then((keywords) => {
+    // Hide the loading button once the data loads
     keyword_loading.classed("d-none", true);
+    // Generate plots
     generateWordCloud(keywords);
     generateLollipopChart(keywords);
 });
 
 // Import the domain scores data and generate the bubble chart and bar chart 
 d3.json("api/domainscores/all").then((domainscores) => {
+    // Hide the loading button once the data loads
     domain_loading.classed("d-none", true)
+    // Generate plots
     generateBubbleChart(domainscores.article_data);
     generateBarChart(domainscores.category_counts);
 });
