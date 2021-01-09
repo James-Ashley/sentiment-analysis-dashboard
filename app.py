@@ -23,8 +23,6 @@ stop_words = stopwords.words("english")
 # This function tokenizes text (removes punctuation and stop words)
 # Input = list of strings
 # Output = list of tokens
-
-
 def process_corpus(titles):
     tokens = []
     for title in titles:
@@ -38,12 +36,11 @@ def process_corpus(titles):
         tokens.extend(toks)
     return tokens
 
-
 # Initialize the Flask app
 app = Flask(__name__)
 
 # Connection to MongoDB database
-etfl_database = f"mongodb+srv://{username}:{password}@clusterprime.mpaq0.mongodb.net/ETL?retryWrites=true&w=majority"
+etfl_database = f"mongodb+srv://{username}:{password}@cluster0.32kwu.mongodb.net/ETL?retryWrites=true&w=majority"
 
 # Configure MongoDB
 app.config["MONGO_URI"] = os.environ.get("MONGODB_URI", etfl_database)
@@ -54,9 +51,12 @@ mongo = PyMongo(app)
 # Format of db in MONGODB:
 # Database: ETL
 # Collection: NFTA
-# Keys:
-# ['keyword', 'source', 'author', 'title', 'url', 'published',
-# 'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
+#   Fields: ['keyword', 'source', 'author', 'title', 'url', 'published',
+#   'compound_score', 'negative_score', 'positive_score', 'neutral_score', 'text_excerpt', 'text_complete', 'sentiment_category']
+# Collection: bigrams
+#   Fields: ['nodes', 'links', 'text_source']
+# Collection: sentiment_counts
+#   Fields: ['source', 'sentiment_category', 'count']
 
 # Routes that return webpages
 @app.route("/")
@@ -86,7 +86,13 @@ def keywords():
 
 @app.route("/methods")
 def methods():
+
     return render_template("methods.html")
+
+
+@app.route("/datatable")
+def datatable():
+    return render_template("datatable.html")
 
 
 # Routes that return data from MongoDB
@@ -101,13 +107,16 @@ def getDomainList():
 @app.route("/api/keywords/<domain_name>", methods=["GET"])
 def getFilteredKeywords(domain_name):
     # Check if filter was included
-    if domain_name == 'all':
+    if domain_name == "all":
+
         news_data = mongo.db.NFTA.find({})
+
     else:
         filter = {"source": domain_name}
 
         news_data = mongo.db.NFTA.find(filter)
 
+    # Extract data
     headlines = []
 
     for article in news_data:
@@ -135,13 +144,18 @@ def getFilteredKeywords(domain_name):
 @app.route("/api/domainscores/<domain_name>", methods=["GET"])
 def getFilteredDomainScores(domain_name):
     # Check if filter was included
-    if domain_name == 'all':
+    if domain_name == "all":
+
         news_data = mongo.db.NFTA.find({})
+        sent_data = mongo.db.sentiment_counts.find({'aggregation': 'all'})
+
     else:
         filter = {"source": domain_name}
 
         news_data = mongo.db.NFTA.find(filter)
+        sent_data = mongo.db.sentiment_counts.find(filter)
 
+    # Extract data pt.1
     domains = []
 
     for article in news_data:
@@ -153,37 +167,78 @@ def getFilteredDomainScores(domain_name):
             "published": article["published"],
         }
         domains.append(item)
-    
-    df = pd.DataFrame(domains)
 
-    count = dict(df["sentiment_category"].value_counts())
+    #Extract data pt.2
+    sent_counts = []
 
-    count_list = []
+    for article in sent_data:
+        item = {
+            "category": article["sentiment_category"],
+            "count": article["count"]
+        }
+        sent_counts.append(item)
 
-    for key, value in count.items():
-        x = {"category": key, "frequency": int(value)}
-        count_list.append(x)
-
-    domain_scores = {"article_data": domains, "category_counts": count_list}
+    domain_scores = {"article_data": domains, "category_counts": sent_counts}
 
     return jsonify(domain_scores)
 
 
 @app.route("/api/bigrams/<text_source>", methods=["GET"])
 def getFilteredBigrams(text_source):
-    filter = {'text_source': text_source}
+    # Create filter
+    filter = {"text_source": text_source}
 
     bigrams_data = mongo.db.bigrams.find(filter)
 
+    #Extract data
     bigrams = {}
 
     for obj in bigrams_data:
-        bigrams = {
-            "nodes": obj['nodes'],
-            "links": obj['links']
-        }
+        bigrams = {"nodes": obj["nodes"], "links": obj["links"]}
 
     return jsonify(bigrams)
+
+
+@app.route("/api/datatable")
+def getDataTable():
+    data = mongo.db.NFTA.find({})
+
+    # Extract data
+    news = {"data": []}
+
+    for article in data:
+        item = {
+            "Keyword": article["keyword"],
+            "Source": article["source"],
+            "Author": article["author"],
+            "Title": article["title"],
+            "URL": article["url"],
+            "Published": article["published"],
+            "Compound Score": article["compound_score"],
+            "Sentiment Category": article["sentiment_category"],
+        }
+        news["data"].append(item)
+
+    return jsonify(news)
+
+
+@app.route("/api/domainsentiment")
+def getDomainSentiment():
+
+    data = mongo.db.sentiment_counts.find({'aggregation':'domain'})
+
+    #Extract data
+    sent_counts = []
+
+    for article in data:
+        item = {
+            "sentiment": article["sentiment_category"],
+            "source": article["source"],
+            "count": article["count"]
+        }
+        sent_counts.append(item)
+
+    return jsonify(sent_counts)
 
 
 if __name__ == "__main__":

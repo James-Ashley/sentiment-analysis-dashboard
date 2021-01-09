@@ -25,26 +25,40 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 jumbotron text-center">
-        <h1>Sentiment Analysis Domains</h1>
-        <h6>Select which domain you like to examine further</h6>
+        <h1>Sentiment Analysis of News Headlines</h1>
+        <div class="row h-100">
+            <div class='col-md-6 text-right my-auto'>
+              <div class='m-3'>
+                <h4>Pick a News Source:</h4>
+              </div>
+            </div>
+            <div class='col-md-6 text-left my-auto'>
+              <div class='m-3'>
+                <select id="domain-names"></select>
+                <button id="refresh-btn" type="button" class="btn btn-dark p-2">Clear Filter</button>   
+              </div>             
+            </div>
+        </div>
       </div>
     </div>
     <div class="row justify-content-center text-center">
-      <div class="col-md-12 align-self-center">
-        <div class="well">
-          <h3>Domains:</h3>
-          <select id="domain-names" onchange="optionChanged(this.value)"></select>
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div id="bubble-chart"></div>
+      <div class="col-md-12">
+        <h3 id="news-source"></h3>
+        <hr>
+        <h5>Sentiment Categories</h5>
       </div>
       <div class="col-md-4">
         <div id="bar-chart"></div>
       </div>
+      <div class="col-md-8">
+        <div id="bubble-chart"></div>
+      </div>
+      <hr>
     </div>
-    <div class="col-md-12 text-center">
-      <h3>Frequency of Words</h3>
+    <div class="row m-5">
+      <div class="col-md-12  text-center">
+        <h5>Most Frequent Keywords</h5>
+      </div>
     </div>
     <div class="row justify-content-evenly">
       <div class="col-md-6">
