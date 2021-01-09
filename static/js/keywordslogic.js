@@ -111,9 +111,13 @@ var nodeOrder = d3.select('#text-type');
 
 // Function which changes data source
 function changeData(){
+    // Select dropdown item that was selected
     let selected = d3.select('#text-type').property('value');
+
+    // Modify dropdown item value for arc diagram title
     let text_type = selected.toUpperCase().replace('_', ' ');
-    console.log(text_type)
+
+    // Call updated data
     let api_call = 'api/bigrams/' + selected;
     d3.json(api_call).then(function(data){
         createArc(data, text_type);
