@@ -36,6 +36,7 @@ def process_corpus(titles):
         tokens.extend(toks)
     return tokens
 
+
 # Initialize the Flask app
 app = Flask(__name__)
 
@@ -104,15 +105,20 @@ def getDomainList():
     return jsonify(domains)
 
 
-@app.route("/api/keywords/<domain_name>", methods=["GET"])
-def getFilteredKeywords(domain_name):
+@app.route("/api/keywords/<domain_name>/<sent_cat>", methods=["GET"])
+def getFilteredKeywords(domain_name, sent_cat):
     # Check if filter was included
     if domain_name == "all":
-
-        news_data = mongo.db.NFTA.find({})
+        if sent_cat == "all":
+            news_data = mongo.db.NFTA.find({})
+        else:
+            filter = {"sentiment_category": sent_cat}
 
     else:
-        filter = {"source": domain_name}
+        if sent_cat == "all":
+            filter = {"source": domain_name}
+        else:
+            filter = {"source": domain_name, "sentiment_category": sent_cat}
 
         news_data = mongo.db.NFTA.find(filter)
 
@@ -147,7 +153,7 @@ def getFilteredDomainScores(domain_name):
     if domain_name == "all":
 
         news_data = mongo.db.NFTA.find({})
-        sent_data = mongo.db.sentiment_counts.find({'aggregation': 'all'})
+        sent_data = mongo.db.sentiment_counts.find({"aggregation": "all"})
 
     else:
         filter = {"source": domain_name}
@@ -168,14 +174,11 @@ def getFilteredDomainScores(domain_name):
         }
         domains.append(item)
 
-    #Extract data pt.2
+    # Extract data pt.2
     sent_counts = []
 
     for article in sent_data:
-        item = {
-            "category": article["sentiment_category"],
-            "count": article["count"]
-        }
+        item = {"category": article["sentiment_category"], "count": article["count"]}
         sent_counts.append(item)
 
     domain_scores = {"article_data": domains, "category_counts": sent_counts}
@@ -190,7 +193,7 @@ def getFilteredBigrams(text_source):
 
     bigrams_data = mongo.db.bigrams.find(filter)
 
-    #Extract data
+    # Extract data
     bigrams = {}
 
     for obj in bigrams_data:
@@ -225,21 +228,36 @@ def getDataTable():
 @app.route("/api/domainsentiment")
 def getDomainSentiment():
 
-    data = mongo.db.sentiment_counts.find({'aggregation':'domain'})
+    data = mongo.db.sentiment_counts.find({"aggregation": "domain"})
 
-    #Extract data
+    # Extract data
     sent_counts = []
 
     for article in data:
         item = {
             "sentiment": article["sentiment_category"],
             "source": article["source"],
-            "count": article["count"]
+            "count": article["count"],
         }
         sent_counts.append(item)
 
     return jsonify(sent_counts)
 
+@app.route("/api/randomheadline")
+def getRandomHeadline():
+    data = mongo.db.NFTA.aggregate([{ "$sample": { "size": 1 }}])
+
+    headline_info = []
+
+    for article in data:
+        headline = {
+            'title': article['title'],
+            'sentiment': article['sentiment_category'],
+            'source': article['source']
+        }
+        headline_info.append(headline)
+
+    return jsonify(headline_info)
 
 if __name__ == "__main__":
     app.run(debug=True)

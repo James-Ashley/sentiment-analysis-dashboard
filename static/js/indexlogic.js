@@ -44,8 +44,31 @@ function generateStackedChart(data) {
 
 };
 
+// Function that puts text into headline generator
+function generateHeadline() {
+  d3.json("api/randomheadline").then((headline_info) => {
+    headline.text(headline_info[0]['title']);
+    sentiment.text(headline_info[0]['sentiment']);
+    news_source.text(headline_info[0]['source']);
+  });
+};
 
 // Initialize the plot 
 d3.json("api/domainsentiment").then((domain_sent) => {
     generateStackedChart(domain_sent)
 });
+
+// Select the headline elements
+var headline = d3.select("#headline")
+var sentiment = d3.select("#sentiment")
+var news_source = d3.select("#source")
+
+// Initialize random headline
+generateHeadline()
+
+// Select the headline button
+var headline_button = d3.select("#headline-button")
+
+// Create event listener
+headline_button.on('click', generateHeadline)
+
