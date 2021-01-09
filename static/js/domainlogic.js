@@ -116,7 +116,7 @@ function generateLollipopChart(data){
         .enter()
         .append("line")
             .attr("x1", x(0))
-            .attr("x2", x(0))
+            .attr("x2", function(d) { return x(d.frequency); })
             .attr("y1", function(d) { return y(d.keyword); })
             .attr("y2", function(d) { return y(d.keyword); })
             .attr("stroke", "grey")
@@ -126,22 +126,11 @@ function generateLollipopChart(data){
         .data(data)
         .enter()
         .append("circle")
-            .attr("cx", x(0))
+            .attr("cx", function(d) { return x(d.frequency); })
             .attr("cy", function(d) { return y(d.keyword); })
             .attr("r", "7")
             .style("fill", "#a3d2a0")
             .attr("stroke", "grey")
-    
-    // Change the x coordinates of line and circle so that they transition on loading
-    svg.selectAll("circle")
-        .transition()
-        .duration(2000)
-        .attr("cx", function(d) { return x(d.frequency); })
-
-    svg.selectAll("line")
-        .transition()
-        .duration(2000)
-        .attr("x1", function(d) { return x(d.frequency); })
 
 };
 
