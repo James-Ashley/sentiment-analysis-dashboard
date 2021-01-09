@@ -1,12 +1,3 @@
-//Initial check - REMOVE BEFORE DEPLOYING
-console.log('this webpage is rendering')
-
-//TODO: 
-
-// BUBBLE CHART
-// Tweak hover text
-
-
 // Functions
 
 // This function generates a word cloud with word size proportional to word frequency using D3-cloud. 
@@ -35,7 +26,7 @@ function generateWordCloud(wordArray) {
     var colorScale = d3.scaleQuantile()
         .domain([d3.min(wordArray.map(function(d) {return d.frequency})), d3.max(wordArray.map(function(d) {return d.frequency}))])
         .range(colors);
-
+    
     // Append the svg object to the body of the page
     var svg = d3.select("#word-cloud").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -155,7 +146,7 @@ function generateLollipopChart(data){
 };
 
 // This function creates a bubble chart of headline sentiment scores using Plotly
-function generateBubbleChart(input, data) {
+function generateBubbleChart(data) {
 
     // Create trace
     let bubbleTrace = {
@@ -165,29 +156,34 @@ function generateBubbleChart(input, data) {
         marker: {
             color: data.map(headline => (Math.abs(headline.compound_score) + 1) *10),
             size: data.map(headline => (Math.abs(headline.compound_score) + 1) *10), 
+            sizeref: 0.3,
+            sizemode: 'area',
             colorscale: [['0.0', '#104b6d'], ['0.3333', '#a3d2a0'], ['0.6666','#6f2b6e'], ['1','#5ac4f8']]
-        }
+        },
+        text: data.map(headline => headline.sentiment_category),
+        type: 'scatter'
     };
     // Create layout
     let layout = {
-        title: `Sentiment Scores of ${input} Headlines`,
+        title: `Sentiment Scores`,
+        hovermode: 'closest',
         showlegend: false,
         xaxis: { title: 'Date' },
-        yaxis: { title: 'Compound Sentiment Score' }
+        yaxis: { title: 'Compound Sentiment Score' },
+        config: {responsive: true}
     };
     // Generate plot
     Plotly.newPlot('bubble-chart', [bubbleTrace], layout);
 };
 
 // This function generates a bar chart with a breakdown of sentiment category using Plotly
-function generateBarChart(input, data) {
+function generateBarChart(data) {
 
     // Trace for sentiment categories
     var trace = {
-        x: data.map(category => category.frequency),
-        y: data.map(category => category.category),
+        y: data.map(category => category.frequency),
+        x: data.map(category => category.category),
         type: "bar",
-        orientation: "h",
         marker: {color: ['#104b6d', '#a3d2a0', '#6f2b6e']}
     };
 
@@ -196,7 +192,7 @@ function generateBarChart(input, data) {
     
     // Set layout
     var layout = {
-        title: `Frequency of ${input} Headline Sentiment Categories`
+        title: `Sentiment Frequency`
     };
     
     // Render the plot in the html
@@ -220,6 +216,12 @@ function zoom() {
     })
   };
 
+// Initialize header
+// Select header html
+var header = d3.select('#news-source')
+    
+// Add initial head
+header.append('p').text('All News Source Headlines')
 
 // Initialize webpage with domain dropdown menu
 d3.json("api/domainlist").then((domains) => {
@@ -245,8 +247,8 @@ d3.json("/api/keywords/all").then((keywords) => {
 
 // Import the domain scores data and generate the bubble chart and bar chart 
 d3.json("api/domainscores/all").then((domainscores) => {
-    generateBubbleChart('All', domainscores.article_data);
-    generateBarChart('All', domainscores.category_counts);
+    generateBubbleChart(domainscores.article_data);
+    generateBarChart(domainscores.category_counts);
 });
 
 // Function which changes data source for keyword plots
@@ -260,11 +262,19 @@ function changeKeywordData(selected){
 
 // Function which changes data source for domain plots
 function changeData(){
+    // Clear header
+    header.html('')
+
+    // Pull dropdown selection value
     let selected = d3.select('#domain-names').property('value');
+
+    // Create new header
+    header.append('p').text(`${selected} Headlines`)
+
     let api_call = 'api/domainscores/' + selected;
     d3.json(api_call).then(function(domainscores){
-        generateBubbleChart('All', domainscores.article_data);
-        generateBarChart('All', domainscores.category_counts);
+        generateBubbleChart(domainscores.article_data);
+        generateBarChart(domainscores.category_counts);
       });
     changeKeywordData(selected)
   };
