@@ -173,7 +173,7 @@ def getFilteredDomainScores(domain_name):
 
     for article in sent_data:
         item = {
-            "sentiment": article["sentiment_category"],
+            "category": article["sentiment_category"],
             "count": article["count"]
         }
         sent_counts.append(item)

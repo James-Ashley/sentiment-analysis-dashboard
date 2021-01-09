@@ -181,7 +181,7 @@ function generateBarChart(data) {
 
     // Trace for sentiment categories
     var trace = {
-        y: data.map(category => category.frequency),
+        y: data.map(category => category.count),
         x: data.map(category => category.category),
         type: "bar",
         marker: {color: ['#104b6d', '#a3d2a0', '#6f2b6e']}
