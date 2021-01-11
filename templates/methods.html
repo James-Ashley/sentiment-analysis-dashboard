@@ -34,12 +34,15 @@
             <img class="img-fluid" src="../static/images/data.jpg"/> 
             <h6>Data Collection</h6>
             <ul>
-              <li>We started by collecting metadata on articles discussing immigration using NewsAPI. We then webscraped the full text of these articles with Newspaper3k.</li>
+              <li>We started by collecting metadata on articles discussing immigration using NewsAPI.</li>
+              <li>We then webscraped the full text of these articles with Newspaper3k.</li>
             </ul>
             <h6>Data Analysis</h6>
             <ul>
               <li>
-                <p>Two corpora were created: headlines and complete text. We determined the most frequent bigrams using NLTK and then filtered these using a custom function. NLTK Vader was used to classify the sentiment of the article headlines but not of the full text since Vader was trained on social media text.</p>
+                <p>Two corpora were created: headlines and complete text. 
+                  <li>We determined the most frequent bigrams using NLTK and then filtered these using a custom function. </li>
+                  <li>NLTK Vader was used to classify the sentiment of the article headlines but not of the full text since Vader was trained on social media text.</li></p>
               </li>
             </ul>
           </div>
