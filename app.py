@@ -40,7 +40,7 @@ cache_news_data = None
 def getNFTA():
     global cache_news_data
     if not cache_news_data:
-        cache_news_data = list(mongo.db.NFTA.find({}, {'text_complete':0, 'text_excerpt':0, 'negative_score':0, 'positive_score':0, 'neutral_score':0}).limit(100))
+        cache_news_data = list(mongo.db.NFTA.find({}, {'text_complete':0, 'text_excerpt':0, 'negative_score':0, 'positive_score':0, 'neutral_score':0}))
     return cache_news_data
         
 
