@@ -36,6 +36,13 @@ def process_corpus(titles):
         tokens.extend(toks)
     return tokens
 
+cache_news_data = None
+def getNFTA():
+    global cache_news_data
+    if not cache_news_data:
+        cache_news_data = list(mongo.db.NFTA.find({}, {'text_complete':0, 'text_excerpt':0, 'negative_score':0, 'positive_score':0, 'neutral_score':0}).limit(100))
+    return cache_news_data
+        
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -111,7 +118,7 @@ def getFilteredKeywords(domain_name, sent_cat):
     # Check if filter was included
     if domain_name == "all":
         if sent_cat == "all":
-            news_data = mongo.db.NFTA.find({})
+            news_data = getNFTA()
         else:
             filter = {"sentiment_category": sent_cat}
             news_data = mongo.db.NFTA.find(filter)
@@ -154,7 +161,7 @@ def getFilteredDomainScores(domain_name):
     # Check if filter was included
     if domain_name == "all":
 
-        news_data = mongo.db.NFTA.find({})
+        news_data = getNFTA()
         sent_data = mongo.db.sentiment_counts.find({"aggregation": "all"})
 
     else:
@@ -206,7 +213,7 @@ def getFilteredBigrams(text_source):
 
 @app.route("/api/datatable")
 def getDataTable():
-    data = mongo.db.NFTA.find({})
+    data = getNFTA()
 
     # Extract data
     news = {"data": []}
