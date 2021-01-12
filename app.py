@@ -127,7 +127,7 @@ def getFilteredKeywords(domain_name, sent_cat):
             news_data = getNFTA()
         else:
             filter = {"sentiment_category": sent_cat}
-            news_data = mongo.db.NFTA.find(filter)
+            news_data = mongo.db.NFTA.find(filter, {'text_complete':0, 'text_excerpt':0, 'negative_score':0, 'positive_score':0, 'neutral_score':0})
 
     else:
         if sent_cat == "all":
@@ -135,7 +135,7 @@ def getFilteredKeywords(domain_name, sent_cat):
         else:
             filter = {"source": domain_name, "sentiment_category": sent_cat}
 
-        news_data = mongo.db.NFTA.find(filter)
+        news_data = mongo.db.NFTA.find(filter, {'text_complete':0, 'text_excerpt':0, 'negative_score':0, 'positive_score':0, 'neutral_score':0})
 
     # Extract data
     headlines = []
@@ -173,7 +173,7 @@ def getFilteredDomainScores(domain_name):
     else:
         filter = {"source": domain_name}
 
-        news_data = mongo.db.NFTA.find(filter)
+        news_data = mongo.db.NFTA.find(filter, {'text_complete':0, 'text_excerpt':0, 'negative_score':0, 'positive_score':0, 'neutral_score':0})
         sent_data = mongo_throttled.db.sentiment_counts.find(filter)
 
     # Extract data pt.1
