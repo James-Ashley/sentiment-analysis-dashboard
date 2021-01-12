@@ -56,6 +56,12 @@ app.config["MONGO_URI"] = os.environ.get("MONGODB_URI2", etfl_database)
 # Initialize MongoDB application
 mongo = PyMongo(app)
 
+# Configure MongoDB
+app.config["MONGO_URI"] = os.environ.get("MONGODB_URI", etfl_database)
+
+# Initialize MongoDB application
+mongo_throttled = PyMongo(app)
+
 # Format of db in MONGODB:
 # Database: ETL
 # Collection: NFTA
@@ -107,7 +113,7 @@ def datatable():
 @app.route("/api/domainlist")
 def getDomainList():
 
-    domains = mongo.db.NFTA.distinct("source")
+    domains = mongo_throttled.db.NFTA.distinct("source")
 
     return jsonify(domains)
 
@@ -162,13 +168,13 @@ def getFilteredDomainScores(domain_name):
     if domain_name == "all":
 
         news_data = getNFTA()
-        sent_data = mongo.db.sentiment_counts.find({"aggregation": "all"})
+        sent_data = mongo_throttled.db.sentiment_counts.find({"aggregation": "all"})
 
     else:
         filter = {"source": domain_name}
 
         news_data = mongo.db.NFTA.find(filter)
-        sent_data = mongo.db.sentiment_counts.find(filter)
+        sent_data = mongo_throttled.db.sentiment_counts.find(filter)
 
     # Extract data pt.1
     domains = []
@@ -237,7 +243,7 @@ def getDataTable():
 @app.route("/api/domainsentiment")
 def getDomainSentiment():
 
-    data = mongo.db.sentiment_counts.find({"aggregation": "domain"})
+    data = mongo_throttled.db.sentiment_counts.find({"aggregation": "domain"})
 
     # Extract data
     sent_counts = []
@@ -254,7 +260,7 @@ def getDomainSentiment():
 
 @app.route("/api/randomheadline")
 def getRandomHeadline():
-    data = mongo.db.NFTA.aggregate([{ "$sample": { "size": 1 }}])
+    data = mongo_throttled.db.NFTA.aggregate([{ "$sample": { "size": 1 }}])
 
     headline_info = []
 
