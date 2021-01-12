@@ -51,7 +51,7 @@ app = Flask(__name__)
 etfl_database = f"mongodb+srv://{username}:{password}@cluster0.32kwu.mongodb.net/ETL?retryWrites=true&w=majority"
 
 # Configure MongoDB
-app.config["MONGO_URI"] = os.environ.get("MONGODB_URI", etfl_database)
+app.config["MONGO_URI"] = os.environ.get("MONGODB_URI2", etfl_database)
 
 # Initialize MongoDB application
 mongo = PyMongo(app)
