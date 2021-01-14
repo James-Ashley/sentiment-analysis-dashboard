@@ -36,6 +36,7 @@ def process_corpus(titles):
         tokens.extend(toks)
     return tokens
 
+# Cache "find all" searches to reduce number of calls to MongoDB
 cache_news_data = None
 def getNFTA():
     global cache_news_data
@@ -50,13 +51,13 @@ app = Flask(__name__)
 # Connection to MongoDB database
 etfl_database = f"mongodb+srv://{username}:{password}@cluster0.32kwu.mongodb.net/ETL?retryWrites=true&w=majority"
 
-# Configure MongoDB
+# Configure MongoDB cluster 1
 app.config["MONGO_URI"] = os.environ.get("MONGODB_URI2", etfl_database)
 
 # Initialize MongoDB application
 mongo = PyMongo(app)
 
-# Configure MongoDB
+# Configure MongoDB cluster 2
 app.config["MONGO_URI"] = os.environ.get("MONGODB_URI", etfl_database)
 
 # Initialize MongoDB application
@@ -110,6 +111,7 @@ def datatable():
 
 
 # Routes that return data from MongoDB
+# Returns a list of unique domains (news sources) in dataset
 @app.route("/api/domainlist")
 def getDomainList():
 
@@ -117,7 +119,8 @@ def getDomainList():
 
     return jsonify(domains)
 
-
+# This route requires two search terms - which domain and which sentiment category. If no filter is desired, "all" should be used instead.
+# This route returns the most frequent keywords of the headlines
 @app.route("/api/keywords/<domain_name>/<sent_cat>", methods=["GET"])
 def getFilteredKeywords(domain_name, sent_cat):
 
@@ -161,7 +164,9 @@ def getFilteredKeywords(domain_name, sent_cat):
 
     return jsonify(keywords_final)
 
-
+# This route requires a domain name filter. If not filter is desired, use "all" instead.
+# This route returns the news headline, compound sentiment score, sentiment category, source and publication date for each article.
+# It also returns a count of the sentiment categories.
 @app.route("/api/domainscores/<domain_name>", methods=["GET"])
 def getFilteredDomainScores(domain_name):
     # Check if filter was included
@@ -200,7 +205,7 @@ def getFilteredDomainScores(domain_name):
 
     return jsonify(domain_scores)
 
-
+# This route returns the most relevant bigrams for the text of choice - headlines or full_text
 @app.route("/api/bigrams/<text_source>", methods=["GET"])
 def getFilteredBigrams(text_source):
     # Create filter
@@ -216,7 +221,7 @@ def getFilteredBigrams(text_source):
 
     return jsonify(bigrams)
 
-
+# This route returns the data formatted for the data table
 @app.route("/api/datatable")
 def getDataTable():
     data = getNFTA()
@@ -239,7 +244,7 @@ def getDataTable():
 
     return jsonify(news)
 
-
+# This route returns the sentiment count by domain
 @app.route("/api/domainsentiment")
 def getDomainSentiment():
 
@@ -258,6 +263,7 @@ def getDomainSentiment():
 
     return jsonify(sent_counts)
 
+# This route returns a random headline with its corresponding sentiment category and news source
 @app.route("/api/randomheadline")
 def getRandomHeadline():
     data = mongo_throttled.db.NFTA.aggregate([{ "$sample": { "size": 1 }}])
