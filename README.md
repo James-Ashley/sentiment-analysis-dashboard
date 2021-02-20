@@ -33,10 +33,12 @@ Bigrams of the headlines and the full length articles were determined using NLTK
 
 ### Machine Learning Classification Models
 #### Text Preprocessing
-The headlines were tokenized using the NLTK RegexpTokenizer, tagged for POS using NLTK, and lemmatized using the NLTK WordNet Lemmatizer. We also used one hot encoding to normalize the newspaper source. We used pySpark to hash the dataset and generate a TF-IDF. 
+The headlines were tokenized using the NLTK RegexpTokenizer, tagged for POS using NLTK, and lemmatized using the NLTK WordNet Lemmatizer. We removed stopwords not related to negation. We also used one hot encoding to normalize the newspaper source. We used pySpark to hash the dataset and generate a TF-IDF. 
 
 #### Training the Models
-70% of the data was used to train the models and 30% was used to test the models. Two models were chosen due to their prevoius success in classifying sentiment: NaiveBayes, OnevsRest (using a logistic regression classifier), and Multilayer Perceptron. Originally, both models were trained using TF-IDF and newspaper source as the features, but the accuracy was extremely low (under 0.30). Then, both models were trained using only TF-IDF, and this yielded more accurate models (0.56, 0.64, and 0.60 respectively).
+80% of the data was used to train the models and 20% was used to test the models (this was a stratified split). Two models were chosen due to their prevoius success in classifying sentiment: NaiveBayes, OnevsRest (using a logistic regression classifier), and Multilayer Perceptron. Originally, both models were trained using TF-IDF and newspaper source as the features, but the accuracy was extremely low (under 0.30). Then, both models were trained using only TF-IDF, and this yielded more accurate models (0.635, 0.639, and 0.628 respectively).
+
+We also tried analyzing n-grams rather than individual words and word2Vec rather than TF-IDF, but these changes decreased accuracy.
 
 ### App Architecture
 ![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/static/images/architecture.jpg "App Architecture")
@@ -60,7 +62,7 @@ SENTIMENT BY NEWS SOURCE HERE
 
 
 ### Machine Learning Models
-As can be seen from the graph below, our sentiment classifiers performed almost as well as NLTK Vader, and our OneVsRest model performed better than the trained TextBlob model. NLTK Vader performed slightly better than either of our models. 
+As can be seen from the graph below, our sentiment classifiers performed with similar levels of accuracy, and all of our models were more accurate than the trained TextBlob model. NLTK Vader performed slightly better than all of our models. 
 
 
 ## Limitations
