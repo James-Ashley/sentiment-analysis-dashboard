@@ -1,5 +1,3 @@
-<!-- below is just a place holder coppied from index page -->
-
 <!DOCTYPE html>
 <html lang="en-us">
 
@@ -7,7 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name='viewport' content='width=device-width, initial-scale=1.0' \>
-  <title>Home</title>
+  <title>Machine Learning</title>
   <!-- Bootstrap CDN -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
   integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -20,61 +18,102 @@
 <div id="nav-placeholder">
 
 </div>
-
-
 <!--end of Navigation bar-->
 
 <body>
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-12">
-        <br>
-        <br>
-        <h3>Newspaper Headlines on Immigration</h3>
-        <div class="row">
-          <div class="col-md-12">
-            <p>This analysis examines characteristics of newspaper headlines related to the topic of immigration and immigrants. We were particularly interested in the sentiment of different news source headlines and the interconnectivity of frequent words.</p>
-            <br>
-            <h4>What is sentiment?</h4>
-            <p>Sentiment is the emotional strength of a text. In this analysis, sentiment is classified into three categories: positive, negative, and neutral.</p>
-            <!--If we want to randomly generate an example headline, db.collection.aggregate([{ $sample: { size: 1 }}]) will do this for us if we want it -->
+  <div class="row justify-content-evenly">
+    <div class="col-md-12 mt-5 text-center">
+      <h2>Machine Learning</h2>
+    </div>
+    <div class="col-md-12">
+      <div id="data">
+        <h4>Subtitle</h4>
+        <div class="row m-3">
+          <div class="col-md-9">
+            <img class="img-fluid" src="../static/images/data.jpg"/> 
+            <h6>Sub-subtitle</h6>
+            <ul>
+              <li>Bullet 1</li>
+              <li>Bullet 2</li>
+            </ul>
+            <h6>Sub-Subtitle</h6>
+            <ul>
+              <li>
+                <p>Two corpora were created: headlines and complete text. 
+                  <li>We determined the most frequent bigrams using NLTK and then filtered these using a custom function. </li>
+                  <li>NLTK Vader was used to classify the sentiment of the article headlines but not of the full text since Vader was trained on social media text.</li></p>
+              </li>
+            </ul>
           </div>
-        </div>
-        <br>
-        <br>
-        <div class='row'>
-          <div class='col-md-4'>
-            <div id='random-headline'>
-              <div class="card">
-                <div class="card-body">
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                      <h5 class="card-title">Headline</h5>
-                      <p class="card-text" id="headline"></p>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div id="libraries">
+                  <h6 class="card-title">Libraries</h6>
+                  <ul>
+                    <li>Python
+                      <ul>
+                        <li>Flask</li>
+                        <li>Newspaper3k</li>
+                        <li>NLTK</li>
+                        <li>pandas</li>
+                        <li>PyMongo</li>
+                        <li>re</li>
+                        <li>spaCy</li>
+                      </ul>
                     </li>
-                    <li class="list-group-item">
-                      <h5 class="card-title">Sentiment</h5>
-                      <p class="card-text" id="sentiment"></p>
-                    </li>
-                    <li class="list-group-item">
-                      <h5 class="card-title">News Source</h5>
-                      <p class="card-text" id='source'></p>
-                    </li>
+                    <li>JavaScript
+                      <ul>
+                        <li>DataTables.js</li>
+                        <li>D3-cloud.js</li>
+                        <li>D3.js</li>
+                        <li>Plotly.js</li>
+                      </ul>
                   </ul>
                 </div>
-                <div class="card-body">
-                  <button type="button" class="btn btn-dark" id='headline-button'>Pull a Different Headline</button>
-                </div>
+                <h6 class="card-title">Web Design</h6>
+                <ul>
+                  <li>Bootstrap</li>
+                  <li>Bootswatch</li>
+                  <li>
+                    <a target="_blank" href="http://vrl.cs.brown.edu/color">Colorgorical</a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-          <div class="col-md-8">
-            <div id="stacked-chart"></div>
+        </div>
+      </div>
+      <div id="architecture">
+        <h4>App Architecture</h4>
+        <div class="row m-3">
+          <div class="col-md-9">
+            <img class="img-fluid" src="../static/images/architecture.jpg"/>
+            <h6>Flask API</h6>
+            <ul>
+              <li>
+                A total of 5 types of flask api routes were created.
+                <ol>
+                  <li>News Sources: This route returns a list of all news sources in the database.</li>
+                  <li>Sentiment Scores: This route returns the raw data and can be filtered by news source.</li>
+                  <li>Sentiment Counts: This route returns the total number of occurrences of each sentiment category. This route can be filtered by news source.</li>
+                  <li>Keywords: This route pulls the headlines from the database and then determines and returns the top 50 most frequent words. This route can be filtered by news source.</li>
+                  <li>Bigrams: This route returns the headline or full text bigrams.</li>
+                </ol>
+              </li>
+            </ul>
+            <h6>JavaScript</h6>
+            <ul>
+              <li>The api calls were performed in Javascript in order to access the data for visualization.</li>
+            </ul>
+          </div>
+          <div class="col-md-3">
           </div>
         </div>
-        </div>
-      </div>    
+      </div>
     </div>    
+  </div>
   </div>
 
 
@@ -87,15 +126,9 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 
-  <!-- D3 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
-  <!-- Plotly -->
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <!-- Custom JS -->
-  <script type="text/javascript" charset="utf8" src="../static/js/navload.js"></script>
-  <script type="text/javascript" charset="utf8" src="../static/js/indexlogic.js"></script>
-
-
+  <!-- Template for Additional JS files/CDNs -->
+  <script type="text/javascript" charset="utf8" src="/static/js/navload.js"></script>
+  <!-- <script type="text/javascript" charset="utf8" src="add js file here"></script> -->
 </body>
 
 </html>
