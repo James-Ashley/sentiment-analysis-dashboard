@@ -27,12 +27,11 @@
       <h2>Sentiment Classification Using Machine Learning</h2>
     </div>
     <div class="col-md-12">
-      <div id="data">
-        <h4>Data Preprocessing</h4>
+      <div id="data" class='mt-5'>
         <div class="row m-3">
           <div class="col-md-8">
-            <!-- place holder image -->
-            <img class="img-fluid" src="../static/images/data.jpg"/> 
+            <h4>Data Preprocessing</h4>
+            <img class="img-fluid" src="../static/images/text_processing.jpg"/> 
             <h6>Headline Preprocessing</h6>
             <ul>
               <li>Text was tokenized using the NLTK RegexpTokenizer.</li>
@@ -46,46 +45,7 @@
               <li>NGrams reduced model accuracy.</li>
               <li>Word2Vec and Hashing + TF-IDF were compared. Hashing + TF-IDF was more accurate.</li>
             </ul>
-          </div>
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body">
-                <div id="libraries">
-                  <h6 class="card-title">Libraries</h6>
-                  <ul>
-                    <li>numpy</li>
-                    <li>pandas</li>
-                    <li>NLTK
-                      <ul>
-                        <li>RegexpTokenizer</li>
-                        <li>POS Tagger</li>
-                        <li>stopwords (English)</li>
-                        <li>WordNetLemmatizer</li>
-                      </ul>
-                    </li>
-                    <li>pySpark
-                      <ul>
-                        <li>HashingTF</li>
-                        <li>IDF</li>
-                        <li>Word2Vec</li>
-                        <li>NGrams</li>
-                        <li>Naive Bayes</li>
-                        <li>Logistic Regression</li>
-                        <li>One vs Rest</li>
-                        <li>Multilayer Perceptron Classifier</li>
-                        <li>Multiclass Classification Evaluator</li>
-                      </ul>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="models">
-        <h4>Machine Learning Models</h4>
-        <div class="row m-3">
-          <div class="col-md-9">
+            <h4 class='mt-5'>Machine Learning Models</h4>
             <h6>Selected Models</h6>
             <ul>
               <li>Naive Bayes</li>
@@ -99,19 +59,52 @@
               <li>All models were evaluated using the Multiclass Classifier Evaluator in pySpark.</li>
             </ul>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <div id="libraries">
+                  <h6 class="card-title">Libraries</h6>
+                  <ul>
+                    <li>NLTK
+                      <ul>
+                        <li>Vader</li>
+                        <li>RegexpTokenizer</li>
+                        <li>POS Tagger</li>
+                        <li>stopwords (English)</li>
+                        <li>WordNetLemmatizer</li>
+                      </ul>
+                    </li>
+                    <li>numpy</li>
+                    <li>pandas</li>
+                    <li>pySpark
+                      <ul>
+                        <li>HashingTF</li>
+                        <li>IDF</li>
+                        <li>Word2Vec</li>
+                        <li>NGrams</li>
+                        <li>Naive Bayes</li>
+                        <li>Logistic Regression</li>
+                        <li>One vs Rest</li>
+                        <li>Multilayer Perceptron Classifier</li>
+                        <li>Multiclass Classification Evaluator</li>
+                      </ul>
+                    <li>TextBlob</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div id="results">
-        <h4>Model Accuracy</h4>
         <div class="row m-3">
-          <div class="col-md-9">
+          <div class="col-md-10">
+            <h4>Model Accuracy</h4>
             <!-- place holder image -->
-            <img class="img-fluid" src="../static/images/architecture.jpg"/>
-            <p>Our models were more accurate than a trained NaiveBayes TextBlob classifier. NLTK Vader performed only slightly better than our models</p>
+            <div id='accuracy-chart'></div>
+            <p>Our models were more accurate than a trained NaiveBayes TextBlob classifier while NLTK Vader performed only slightly better than our models</p>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
           </div>
         </div>
       </div>
