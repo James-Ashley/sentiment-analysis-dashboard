@@ -35,7 +35,7 @@ Bigrams of the headlines and the full length articles were determined using NLTK
 #### Text Preprocessing
 The headlines were tokenized using the NLTK RegexpTokenizer, tagged for POS using NLTK, and lemmatized using the NLTK WordNet Lemmatizer. We also used one hot encoding to normalize the newspaper source. We used pySpark to hash the dataset and generate a TF-IDF. 
 
-### Training the Models
+#### Training the Models
 70% of the data was used to train the models and 30% was used to test the models. Two models were chosen due to their prevoius success in classifying sentiment: NaiveBayes and OnevsRest (using a logistic regression classifier). Originally, both models were trained using TF-IDF and newspaper source as the features, but the accuracy was extremely low (under 0.30). Then, both models were trained using only TF-IDF, and this yielded more accurate models (0.55 and 0.60 respectively).
 
 ### App Architecture
