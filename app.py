@@ -113,9 +113,6 @@ def mlearning():
 def datatable():
     return render_template("datatable.html")
 
-@app.route("/mlearning")
-def datatable():
-    return render_template("mlearning.html")
 
 # Routes that return data from MongoDB
 # Returns a list of unique domains (news sources) in dataset
