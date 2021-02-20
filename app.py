@@ -104,6 +104,10 @@ def methods():
 
     return render_template("methods.html")
 
+@app.route("/mlearning")
+def mlearning():
+
+    return render_template("mlearning.html")
 
 @app.route("/datatable")
 def datatable():
