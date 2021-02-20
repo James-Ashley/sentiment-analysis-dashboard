@@ -24,91 +24,92 @@
   <div class="container">
   <div class="row justify-content-evenly">
     <div class="col-md-12 mt-5 text-center">
-      <h2>Machine Learning</h2>
+      <h2>Sentiment Classification Using Machine Learning</h2>
     </div>
     <div class="col-md-12">
       <div id="data">
-        <h4>Subtitle</h4>
+        <h4>Data Preprocessing</h4>
         <div class="row m-3">
-          <div class="col-md-9">
+          <div class="col-md-8">
             <!-- place holder image -->
             <img class="img-fluid" src="../static/images/data.jpg"/> 
-            <h6>Sub-subtitle</h6>
+            <h6>Headline Preprocessing</h6>
             <ul>
-              <li>Bullet 1</li>
-              <li>Bullet 2</li>
+              <li>Text was tokenized using the NLTK RegexpTokenizer.</li>
+              <li>The NLTK English stopwords (except for negators) were removed.</li>
+              <li>Part of Speech (POS) was tagged using NLTK.</li>
+              <li>Text was lemmatized using the WordNetLemmatizer.</li>
             </ul>
-            <h6>Sub-Subtitle</h6>
+            <h6>Feature Selection</h6>
             <ul>
-              <li>
-                <p>Bullet 1 
-                  <li>Bullet 2 </li>
-                  <li>Bullet 3</li></p>
-              </li>
+              <li>Newspaper source reduced model accuracy.</li> 
+              <li>NGrams reduced model accuracy.</li>
+              <li>Word2Vec and Hashing + TF-IDF were compared. Hashing + TF-IDF was more accurate.</li>
             </ul>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="card">
               <div class="card-body">
                 <div id="libraries">
-                  <h6 class="card-title">Title</h6>
+                  <h6 class="card-title">Libraries</h6>
                   <ul>
-                    <li>Bullet 1
+                    <li>numpy</li>
+                    <li>pandas</li>
+                    <li>NLTK
                       <ul>
-                        <li>Sub-bullet 1</li>
-                        <li>Sub-bullet 2</li>
-                        <li>Sub-bullet 3</li>
-                        <li>Sub-bullet 4</li>
-                        <li>Sub-bullet 5</li>
-                        <li>Sub-bullet 6</li>
-                        <li>Sub-bullet 7</li>
+                        <li>RegexpTokenizer</li>
+                        <li>POS Tagger</li>
+                        <li>stopwords (English)</li>
+                        <li>WordNetLemmatizer</li>
                       </ul>
                     </li>
-                    <li>Bullet 2
+                    <li>pySpark
                       <ul>
-                        <li>Sub-bullet 1</li>
-                        <li>Sub-bullet 2</li>
-                        <li>Sub-bullet 3</li>
-                        <li>Sub-bullet 4</li>
+                        <li>HashingTF</li>
+                        <li>IDF</li>
+                        <li>Word2Vec</li>
+                        <li>NGrams</li>
+                        <li>Naive Bayes</li>
+                        <li>Logistic Regression</li>
+                        <li>One vs Rest</li>
+                        <li>Multilayer Perceptron Classifier</li>
+                        <li>Multiclass Classification Evaluator</li>
                       </ul>
                   </ul>
                 </div>
-                <h6 class="card-title">Title</h6>
-                <ul>
-                  <li>Bullet 1</li>
-                  <li>Bullet 2</li>
-                  <li>
-                    <a target="_blank" href="http://vrl.cs.brown.edu/color">Colorgorical</a>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="architecture">
-        <h4>Title</h4>
+      <div id="models">
+        <h4>Machine Learning Models</h4>
+        <div class="row m-3">
+          <div class="col-md-9">
+            <h6>Selected Models</h6>
+            <ul>
+              <li>Naive Bayes</li>
+              <li>One vs. Rest (with a Logistic Regression Classifier)</li>
+              <li>Multilayer Perceptron Classifier</li>
+            </ul>
+            <h6>Testing/Training</h6>
+            <ul>
+              <li>For all models, a stratified 80/20 training/testing split was used.</li>
+              <li>All models were generated in pySpark.</li>
+              <li>All models were evaluated using the Multiclass Classifier Evaluator in pySpark.</li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+          </div>
+        </div>
+      </div>
+      <div id="results">
+        <h4>Model Accuracy</h4>
         <div class="row m-3">
           <div class="col-md-9">
             <!-- place holder image -->
             <img class="img-fluid" src="../static/images/architecture.jpg"/>
-            <h6>Subtitle</h6>
-            <ul>
-              <li>
-                Bullet 1
-                <ol>
-                  <li>Sub-bullet 1</li>
-                  <li>Sub-bullet 2</li>
-                  <li>Sub-bullet 3</li>
-                  <li>Sub-bullet 4</li>
-                  <li>Sub-bullet 5</li>
-                </ol>
-              </li>
-            </ul>
-            <h6>Subtitle</h6>
-            <ul>
-              <li>Bullet 1</li>
-            </ul>
+            <p>Our models were more accurate than a trained NaiveBayes TextBlob classifier. NLTK Vader performed only slightly better than our models</p>
           </div>
           <div class="col-md-3">
           </div>
@@ -128,9 +129,13 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 
-  <!-- Template for Additional JS files/CDNs -->
-  <script type="text/javascript" charset="utf8" src="/static/js/navload.js"></script>
-  <!-- <script type="text/javascript" charset="utf8" src="add js file here"></script> -->
+  <!-- D3 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <!-- Plotly -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- Custom JS -->
+  <script type="text/javascript" charset="utf8" src="../static/js/navload.js"></script>
+  <script type="text/javascript" charset="utf8" src="../static/js/mlearninglogic.js"></script>
 </body>
 
 </html>
