@@ -267,6 +267,26 @@ def getDomainSentiment():
 
     return jsonify(sent_counts)
 
+# This route returns the percent of each sentiment by domain
+@app.route("/api/domainsentimentpercents")
+def getDomainSentimentPercent():
+    data = mongo_throttled.db.sentiment_percents.find({}, {'_id':0})
+
+    # Extract data
+    sent_percents = []
+
+    for source in data:
+        item = {
+            "neg_perc": source["negative"],
+            "pos_perc": source["positive"],
+            "neu_perc": source["neutral"],
+            "source": source["source"],
+            "source_bias": source["source_bias"],
+        }
+        sent_percents.append(item)
+
+    return jsonify(sent_percents)
+
 # This route returns a random headline with its corresponding sentiment category and news source
 @app.route("/api/randomheadline")
 def getRandomHeadline():

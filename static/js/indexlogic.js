@@ -1,34 +1,29 @@
 // This function plots a stacked bar chart
 function generateStackedChart(data) {
 
-  // Create separate datasets for each sentiment category
-  let neg_data = data.filter(object => object.sentiment === 'negative')
-  let pos_data = data.filter(object => object.sentiment === 'positive')
-  let neu_data = data.filter(object => object.sentiment === 'neutral')
-
   // Create trace for negative sentiment
   var neg = {
-      x: neg_data.map(domain => domain.source),
-      y: neg_data.map(domain => domain.count),
-      name: 'Negative',
+      x: data.map(domain => domain.source),
+      y: data.map(domain => domain.neg_perc),
+      name: '% Negative',
       type: 'bar',
       marker: {color: '#104b6d'}
   };
   
   // Create trace for neutral sentiment
   var neu = {
-    x: neu_data.map(domain => domain.source),
-    y: neu_data.map(domain => domain.count),
-    name: 'Neutral',
+    x: data.map(domain => domain.source),
+    y: data.map(domain => domain.neu_perc),
+    name: '% Neutral',
     type: 'bar',
     marker: {color: '#a3d2a0'}
   };
   
   // Create trace for positive sentiment
   var pos = {
-    x: pos_data.map(domain => domain.source),
-    y: pos_data.map(domain => domain.count),
-    name: 'Positive',
+    x: data.map(domain => domain.source),
+    y: data.map(domain => domain.pos_perc),
+    name: '% Positive',
     type: 'bar',
     marker: {color: '#6f2b6e'}
   };
@@ -54,7 +49,7 @@ function generateHeadline() {
 };
 
 // Initialize the plot 
-d3.json("api/domainsentiment").then((domain_sent) => {
+d3.json("api/domainsentimentpercents").then((domain_sent) => {
     generateStackedChart(domain_sent)
 });
 
