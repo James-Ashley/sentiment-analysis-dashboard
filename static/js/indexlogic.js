@@ -48,9 +48,41 @@ function generateHeadline() {
   });
 };
 
-// Initialize the plot 
-d3.json("api/domainsentimentpercents").then((domain_sent) => {
-    generateStackedChart(domain_sent)
+// Function that generates scatter plot of % negative headlines
+function generateNegBubbleChart(data) {
+  console.log(data)
+    // Create trace
+    let bubbleTrace = {
+      y: data.map(source => source.neg_perc),
+      x: data.map(source => source.source_bias),
+      mode: 'markers',
+      marker: {
+          color: data.map(source => Math.abs(source.neg_perc)/10),
+          size: data.map(source => Math.abs(source.neg_perc)), 
+          sizeref: 0.3,
+          sizemode: 'area',
+          colorscale: [['0.0', '#104b6d'], ['0.3333', '#a3d2a0'], ['0.6666','#6f2b6e'], ['1','#5ac4f8']]
+      },
+      text: data.map(source => source.source),
+      type: 'scatter'
+  };
+  // Create layout
+  let layout = {
+      title: `Bias and Negative Sentiment`,
+      hovermode: 'closest',
+      showlegend: false,
+      xaxis: { title: 'News Source Bias' },
+      yaxis: { title: '% Negative Headlines' },
+      config: {responsive: true}
+  };
+  // Generate plot
+  Plotly.newPlot('bubble-chart', [bubbleTrace], layout);
+};
+
+// Initialize the plots 
+d3.json("api/domainsentimentpercents").then((sent_percent) => {
+    generateStackedChart(sent_percent)
+    generateNegBubbleChart(sent_percent)
 });
 
 // Select the headline elements
