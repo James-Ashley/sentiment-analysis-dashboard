@@ -69,7 +69,7 @@ From the scatter plot below, it is also clear that newspapers that are further f
 ### Machine Learning Models
 As can be seen from the graph below, our sentiment classifiers performed with similar levels of accuracy, and all of our models were more accurate than the trained TextBlob model. NLTK Vader performed slightly better than all of our models. 
 
-![alt text](![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/static/images/architecture.jpg "App Architecture") "Model Accuracy")
+![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/sentiment_classification/modelaccuracy.png "Model Accuracy")
 
 ## Limitations
 As can be seen in the keyword and bigram analyses, the news cycle is heavily influenced by current events, and we could only access the last few months of news. Continuing to collect news articles over time will allow us to better evaluate which words are related to immigration vs. words that are frequently occuring due to specific events.
