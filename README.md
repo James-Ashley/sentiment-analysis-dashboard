@@ -1,11 +1,10 @@
 # News Headlines on Immigration
-
 Version 2.0.0
 
 ## [View the Website](https://immigrant-headlines-sentiment.herokuapp.com/)
 
 ## Description
-This project includes two parts: 1) display data on newspaper headlines related to immigration on an interactive website and 2) create a machine learning classification model which identifies the sentiment of each headline.
+This project includes three parts: 1) display data on newspaper headlines related to immigration on an interactive website, 2) determine if news source and/or news source bias has an effect on immigration headline sentiment, and 3) create a machine learning classification model which identifies the sentiment of each headline.
 
 ## Background
 This project builds on our prior projects ([Sentiment Analysis](https://github.com/James-Ashley/sentiment_analysis), [Article Web Scraping](https://github.com/James-Ashley/News_Full_Text_Articles)) and examines the sentiment of newspaper headlines and bigrams of both newspaper headlines and full length articles. 
@@ -47,6 +46,7 @@ In this full stack application, data is stored in MongoDB and then pulled, filte
 1. News Sources: This route returns a list of all news sources in the database.
 2. Sentiment Scores: This route returns the raw data and can be filtered by news source.
 3. Sentiment Counts: This route returns the total number of occurrences of each sentiment category. This route can be filtered by news source.
+4. Sentiment Percents: This route returns a normed value for each sentiment category by news source.
 4. Keywords: This route pulls the headlines from the database and then determines and returns the top 50 most frequent words using NLTK. This route can be filtered by news source.
 5. Bigrams: This route returns the headline or full text bigrams.
 
@@ -56,10 +56,15 @@ We conducted API calls in JS and then created visualizations using D3.js, D3-clo
 ### Headline Sentiment
 As can be seen from the graph below, more than half of the headlines had negative sentiment.
 
-OVERALL SENTIMENT GRAPH HERE
+![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/sentiment_analysis/images/headlinesentimentstotal.png "Sentiment Breakdown")
 
-SENTIMENT BY NEWS SOURCE HERE
+It is also clear that the sentiment breakdown varies depending on the news source. The relationship between the sentiment category and the news source can be considered significant according to a chi-squared test (p=5.79e-23). Breitbart News (right leaning) and the Washington Post (left leaning) have the highest percentages of negative headlines.
 
+![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/sentiment_analysis/images/headlinesentimentspercentlegend.png "Sentiment Breakdown by Source")
+
+From the scatter plot below, it is also clear that newspapers that are further from the center or neutral (a bias score of 0) have a higher percentage of negative headlines. 
+
+![alt text](https://github.com/James-Ashley/sentiment-analysis-dashboard/blob/main/sentiment_analysis/images/negsentimentandbias.png "Negative Sentiment by Bias")
 
 ### Machine Learning Models
 As can be seen from the graph below, our sentiment classifiers performed with similar levels of accuracy, and all of our models were more accurate than the trained TextBlob model. NLTK Vader performed slightly better than all of our models. 
